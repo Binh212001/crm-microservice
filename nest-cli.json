@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/bn-erp/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": false,
+    "tsConfigPath": "apps/bn-erp/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/bn-erp",
+  "projects": {
+    "bn-erp": {
+      "type": "application",
+      "root": "apps/bn-erp",
+      "entryFile": "main",
+      "sourceRoot": "apps/bn-erp/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/bn-erp/tsconfig.app.json",
+        "assets": ["**/*.json", "**/*.sql"],
+        "watchAssets": true
+      }
+    },
+    "inventory-service": {
+      "type": "application",
+      "root": "apps/inventory-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/inventory-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/inventory-service/tsconfig.app.json",
+        "assets": ["**/*.json", "**/*.sql"],
+        "watchAssets": true
+      }
+    }
+  }
+}

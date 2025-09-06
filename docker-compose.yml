@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+  db:
+    image: debezium/postgres:16
+    container_name: saas-vmaster-database
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: bn-erp
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+      TZ: 'UTC'
+    ports:
+      - '25432:5432'
+    mem_limit: 4g
+    cpus: '2.0'
+    networks:
+      - sass-backend-network
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U admin -d bn-erp']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: saas-vmaster-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@123.com # user đăng nhập pgAdmin
+      PGADMIN_DEFAULT_PASSWORD: 123456 # password đăng nhập pgAdmin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - '8080:80' # truy cập http://localhost:8080
+    depends_on:
+      - db
+    networks:
+      - sass-backend-network
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  sass-backend-network:
+    driver: bridge
