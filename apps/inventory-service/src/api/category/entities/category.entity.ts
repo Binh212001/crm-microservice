@@ -1,5 +1,6 @@
 import { AbstractEntity } from 'apps/inventory-service/src/database/entities/abstract.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from '../../product/entities/product.entity';
 
 @Entity()
 export class Category extends AbstractEntity {
@@ -11,4 +12,7 @@ export class Category extends AbstractEntity {
 
   @Column({ type: 'varchar' })
   description: string;
+
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
 }

@@ -1,0 +1,36 @@
+import { Expose } from 'class-transformer';
+
+export class ProductResDto {
+  @Expose()
+  id: string;
+  @Expose()
+  name: string;
+  @Expose()
+  sku: string;
+  @Expose()
+  barcode: string;
+  @Expose()
+  description: string;
+  @Expose()
+  isSales: string;
+  @Expose()
+  isPurchase: string;
+  @Expose()
+  isExpenses: string;
+  @Expose()
+  isPointOfSale: string;
+  @Expose()
+  isSubscriptions: string;
+  @Expose()
+  isRental: string;
+  @Expose()
+  productType: string;
+  @Expose()
+  quantityOnHand: string;
+  @Expose()
+  salesPrice: string;
+  @Expose()
+  soldQuantity: string;
+  @Expose()
+  categoryId: string;
+}

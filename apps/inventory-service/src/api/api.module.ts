@@ -8,6 +8,7 @@ import {
   StorageDriver,
 } from 'typeorm-transactional';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       },
     }),
     CategoryModule,
+    ProductModule,
   ],
   providers: [],
   exports: [],
