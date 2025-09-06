@@ -9,34 +9,58 @@ export class CategorySeed {
       {
         name: 'Electronics',
         description: 'Electronic devices and accessories',
+        createdBy: 'admin',
+        updatedBy: 'admin',
+        deletedBy: 'admin',
       },
       {
         name: 'Clothing',
         description: 'Apparel and fashion items',
+        createdBy: 'admin',
+        updatedBy: 'admin',
+        deletedBy: 'admin',
       },
       {
         name: 'Books',
         description: 'Books and educational materials',
+        createdBy: 'admin',
+        updatedBy: 'admin',
+        deletedBy: 'admin',
       },
       {
         name: 'Home & Garden',
         description: 'Home improvement and garden supplies',
+        createdBy: 'admin',
+        updatedBy: 'admin',
+        deletedBy: 'admin',
       },
       {
         name: 'Sports & Outdoors',
         description: 'Sports equipment and outdoor gear',
+        createdBy: 'admin',
+        updatedBy: 'admin',
+        deletedBy: 'admin',
       },
       {
         name: 'Health & Beauty',
         description: 'Health and beauty products',
+        createdBy: 'admin',
+        updatedBy: 'admin',
+        deletedBy: 'admin',
       },
       {
         name: 'Toys & Games',
         description: 'Toys, games, and entertainment',
+        createdBy: 'admin',
+        updatedBy: 'admin',
+        deletedBy: 'admin',
       },
       {
         name: 'Automotive',
         description: 'Car parts and automotive accessories',
+        createdBy: 'admin',
+        updatedBy: 'admin',
+        deletedBy: 'admin',
       },
     ];
 

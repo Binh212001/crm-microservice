@@ -1,10 +1,31 @@
 import { Module } from '@nestjs/common';
 import { CategoryModule } from './category/category.module';
-import { ProductModule } from './product/product.module';
-import { DatabaseModule } from '../database/database.module';
+import { TypeOrmConfigService } from '../database/typeorm-config.service';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import {
+  addTransactionalDataSource,
+  initializeTransactionalContext,
+  StorageDriver,
+} from 'typeorm-transactional';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [DatabaseModule, CategoryModule, ProductModule],
+  imports: [
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService,
+      dataSourceFactory: async (options: DataSourceOptions) => {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+        initializeTransactionalContext({
+          storageDriver: StorageDriver.ASYNC_LOCAL_STORAGE,
+        });
+
+        return addTransactionalDataSource(new DataSource(options));
+      },
+    }),
+    CategoryModule,
+  ],
   providers: [],
   exports: [],
 })

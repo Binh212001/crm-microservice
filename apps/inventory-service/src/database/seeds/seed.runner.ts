@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm';
 import { AppDataSource } from '../datasource';
 import { CategorySeed } from './category.seed';
-import { ProductSeed } from './product.seed';
 
 export class SeedRunner {
   private dataSource: DataSource;
@@ -39,7 +38,6 @@ export class SeedRunner {
   private async runSeeds(): Promise<void> {
     const seeds = [
       new CategorySeed(),
-      new ProductSeed(),
       // Add more seeds here as you create them
     ];
 
