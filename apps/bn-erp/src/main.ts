@@ -20,6 +20,14 @@ async function bootstrap() {
       pathRewrite: { '^/bunny-cloud-service': 'bunny-cloud-service' },
     }),
   );
+  app.use(
+    '/user-service',
+    createProxyMiddleware({
+      target: 'http://localhost:3003',
+      changeOrigin: true,
+      pathRewrite: { '^/user-service': 'user-service' },
+    }),
+  );
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
