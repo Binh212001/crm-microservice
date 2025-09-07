@@ -1,3 +1,7 @@
+<!-- cretae a service  -->
+
+nest g app [servicename]
+
 npm install
 
 <!-- run service -->
@@ -5,6 +9,7 @@ npm install
 npn run start:dev
 npn run start:inventory:dev
 npn run start:bunny-cloud:dev
+npn run start:user:dev
 
 <!-- build service -->
 
