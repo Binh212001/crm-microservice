@@ -1,11 +1,20 @@
-// import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
 
-// export class CreateProductDto {
-//   @IsString()
-//   @IsNotEmpty()
-//   name: string;
+export class CreateVariantDto {
+  @IsString()
+  @IsNotEmpty()
+  attribute: string;
 
-//   @IsString()
-//   @IsOptional()
-//   description?: string;
-// }
+  @IsArray()
+  @IsNotEmpty()
+  values: ValueDto[];
+}
+
+export class ValueDto {
+  @IsString()
+  name: string;
+
+  @IsString()
+  @IsOptional()
+  color: string;
+}

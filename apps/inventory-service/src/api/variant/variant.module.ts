@@ -1,13 +1,14 @@
-// import { Module } from '@nestjs/common';
-// import { ProductController } from './variant.controller';
-// import { ProductService } from './variant.service';
-// import { ProductRepository } from './variant.repository';
-// import { CategoryModule } from '../category/category.module';
+import { Module } from '@nestjs/common';
+import { CategoryModule } from '../category/category.module';
+import { VariantController } from './variant.controller';
+import { VariantService } from './variant.service';
+import { AttributeRepository } from './repositories/attribute.repository';
+import { ValueRepository } from './repositories/value.repository';
 
-// @Module({
-//   imports: [CategoryModule],
-//   controllers: [ProductController],
-//   providers: [ProductService, ProductRepository],
-//   exports: [ProductService],
-// })
-// export class ProductModule {}
+@Module({
+  imports: [CategoryModule],
+  controllers: [VariantController],
+  providers: [VariantService, AttributeRepository, ValueRepository],
+  exports: [VariantService],
+})
+export class VariantModule {}

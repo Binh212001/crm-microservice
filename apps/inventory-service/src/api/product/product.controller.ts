@@ -1,32 +1,29 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   ParseIntPipe,
-  ValidationPipe,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { ProductService } from './product.service';
-import { Product } from './entities/product.entity';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductReqDto } from './dto/product-req.dto';
-import { ProductResDto } from './dto/product-res.dto';
 import { PaginationResponse } from '../../comom/pagination/pagination';
 import { UpdateDeleteResDto } from '../../comom/response/update-delete-res.dto';
+import { CreateProductDto } from './dto/create-product.dto';
+import { ProductReqDto } from './dto/product-req.dto';
+import { ProductResDto } from './dto/product-res.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { Product } from './entities/product.entity';
+import { ProductService } from './product.service';
 
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  async create(
-    @Body(ValidationPipe) createCategoryDto: CreateProductDto,
-  ): Promise<Product> {
+  async create(@Body() createCategoryDto: CreateProductDto): Promise<Product> {
     return await this.productService.create(createCategoryDto);
   }
 
