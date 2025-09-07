@@ -1,5 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { ProxyMiddleware } from './middlewares/proxy.middleware';
+import { Module } from '@nestjs/common';
 @Module({
   imports: [],
   controllers: [],

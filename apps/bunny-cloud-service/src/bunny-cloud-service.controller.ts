@@ -13,7 +13,7 @@ import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { FileValidationPipe } from './file-validation';
 
-@Controller('bunny-cloud-service')
+@Controller()
 export class BunnyCloudServiceController {
   private readonly storageZone = 'crm-dash';
   private readonly apiKey = '38adf11e-738d-4e10-99e92f22ce14-4637-4534';
