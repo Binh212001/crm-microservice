@@ -4,9 +4,12 @@ import {
   IsOptional,
   IsBoolean,
   IsEnum,
+  IsArray,
 } from 'class-validator';
 import { ProductType } from '../enums/product-type.enum';
 import { IsNumber } from 'class-validator';
+import { FileResDto } from 'apps/inventory-service/src/comom/attachments/file.res';
+import { Type } from 'class-transformer';
 
 export class CreateProductDto {
   @IsString()
@@ -56,4 +59,20 @@ export class CreateProductDto {
 
   @IsNumber()
   categoryId: number;
+
+  @IsArray()
+  variants: CreateProductVariantDto[];
+
+  @IsOptional()
+  @Type(() => FileResDto)
+  images: FileResDto;
+}
+
+export class CreateProductVariantDto {
+  @IsNumber()
+  attributeId: number;
+
+  @IsArray()
+  @IsNotEmpty()
+  valueIds: number[];
 }

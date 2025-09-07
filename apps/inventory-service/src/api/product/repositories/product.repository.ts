@@ -1,7 +1,7 @@
-import { BaseRepository } from '../../database/repositories/base.repository';
+import { BaseRepository } from '../../../database/repositories/base.repository';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { Product } from './entities/product.entity';
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class ProductRepository extends BaseRepository<Product> {

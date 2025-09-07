@@ -17,8 +17,20 @@
       "sourceRoot": "apps/bn-erp/src",
       "compilerOptions": {
         "tsConfigPath": "apps/bn-erp/tsconfig.app.json",
-        "assets": ["**/*.json", "**/*.sql"],
+        "assets": [
+          "**/*.json",
+          "**/*.sql"
+        ],
         "watchAssets": true
+      }
+    },
+    "bunny-cloud-service": {
+      "type": "application",
+      "root": "apps/bunny-cloud-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/bunny-cloud-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/bunny-cloud-service/tsconfig.app.json"
       }
     },
     "inventory-service": {
@@ -28,7 +40,10 @@
       "sourceRoot": "apps/inventory-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/inventory-service/tsconfig.app.json",
-        "assets": ["**/*.json", "**/*.sql"],
+        "assets": [
+          "**/*.json",
+          "**/*.sql"
+        ],
         "watchAssets": true
       }
     }

@@ -4,11 +4,14 @@ import {
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
 } from 'typeorm';
 import { Category } from '../../category/entities/category.entity';
 import { ProductType } from '../enums/product-type.enum';
+import { ProductVariant } from './product-variant.entity';
+import { FileResDto } from 'apps/inventory-service/src/comom/attachments/file.res';
 
 @Entity()
 export class Product extends AbstractEntity {
@@ -57,4 +60,11 @@ export class Product extends AbstractEntity {
   category: Relation<Category>;
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt: Date;
+  @OneToMany(() => ProductVariant, (productVariant) => productVariant.product, {
+    eager: true,
+  })
+  variants: Relation<ProductVariant>[];
+
+  @Column({ type: 'jsonb', nullable: true })
+  images: FileResDto;
 }
