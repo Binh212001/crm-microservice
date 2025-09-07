@@ -13,6 +13,14 @@ export class ProxyMiddleware implements NestMiddleware {
         changeOrigin: true,
         pathRewrite: { '^/inventory-service': '' }, // bỏ prefix
       })(req, res, next);
+    } else if (req.url.startsWith('/bunny-cloud-service')) {
+      console.log('🚀 Proxying:', req.url);
+
+      return createProxyMiddleware({
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+        pathRewrite: { '^/bunny-cloud-service': '' },
+      })(req, res, next);
     }
 
     next();

@@ -1,4 +1,6 @@
-import { Expose } from 'class-transformer';
+import { FileResDto } from 'apps/inventory-service/src/comom/attachments/file.res';
+// import { CategoryResDto } from 'apps/inventory-service/src/comom/response/category-res.dto';
+import { Expose, Type } from 'class-transformer';
 
 export class ProductResDto {
   @Expose()
@@ -31,6 +33,9 @@ export class ProductResDto {
   salesPrice: string;
   @Expose()
   soldQuantity: string;
+  // @Expose()
+  // category: CategoryResDto;
   @Expose()
-  categoryId: string;
+  @Type(() => FileResDto)
+  images: FileResDto;
 }
