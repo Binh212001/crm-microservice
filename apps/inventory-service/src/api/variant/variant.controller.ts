@@ -1,53 +1,59 @@
-// import {
-//   Controller,
-//   Get,
-//   Post,
-//   Body,
-//   Patch,
-//   Param,
-//   Delete,
-//   ParseIntPipe,
-//   ValidationPipe,
-// } from '@nestjs/common';
-// import { ProductService } from './variant.service';
-// import { Product } from './entities/attribute.entity';
-// import { CreateProductDto } from './dto/create-variant.dto';
-// import { UpdateProductDto } from './dto/update-variant.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseIntPipe,
+  Post,
+  Param,
+  ValidationPipe,
+  Patch,
+  Delete,
+  Query,
+} from '@nestjs/common';
+import { CreateVariantDto } from './dto/create-variant.dto';
+import { VariantService } from './variant.service';
+import { Attribute } from './entities/attribute.entity';
+import { UpdateVariantDto } from './dto/update-variant.dto';
+import { VariantReqDto } from './dto/variant-req.dto';
+import { PaginationResponse } from '../../comom/pagination/pagination';
+import { VariantResDto } from './dto/variant-res.dto';
+import { UpdateDeleteResDto } from '../../comom/response/update-delete-res.dto';
 
-// @Controller('products')
-// export class ProductController {
-//   constructor(private readonly productService: ProductService) {}
+@Controller('variants')
+export class VariantController {
+  constructor(private readonly variantService: VariantService) {}
 
-//   @Post()
-//   async create(
-//     @Body(ValidationPipe) createCategoryDto: CreateProductDto,
-//   ): Promise<Product> {
-//     return await this.productService.create(createCategoryDto);
-//   }
+  @Post()
+  async create(
+    @Body(ValidationPipe) createCategoryDto: CreateVariantDto,
+  ): Promise<Attribute> {
+    return await this.variantService.create(createCategoryDto);
+  }
 
-//   @Get()
-//   async findAll(): Promise<Product[]> {
-//     return await this.productService.findAll();
-//   }
+  @Get()
+  async findAll(
+    @Query() variantReqDto: VariantReqDto,
+  ): Promise<PaginationResponse<VariantResDto>> {
+    return await this.variantService.findAll(variantReqDto);
+  }
 
-//   @Get(':id')
-//   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Product> {
-//     return await this.productService.findOne(id);
-//   }
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<VariantResDto> {
+    return await this.variantService.findOne(id);
+  }
 
-//   @Patch(':id')
-//   async update(
-//     @Param('id', ParseIntPipe) id: number,
-//     @Body(ValidationPipe) updateCategoryDto: UpdateProductDto,
-//   ): Promise<Product> {
-//     return await this.productService.update(id, updateCategoryDto);
-//   }
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(ValidationPipe) updateCategoryDto: UpdateVariantDto,
+  ): Promise<UpdateDeleteResDto> {
+    return await this.variantService.update(id, updateCategoryDto);
+  }
 
-//   @Delete(':id')
-//   async remove(
-//     @Param('id', ParseIntPipe) id: number,
-//   ): Promise<{ message: string }> {
-//     await this.productService.remove(id);
-//     return { message: 'Category deleted successfully' };
-//   }
-// }
+  @Delete(':id')
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<UpdateDeleteResDto> {
+    return await this.variantService.remove(id);
+  }
+}

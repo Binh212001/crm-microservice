@@ -9,6 +9,7 @@ import {
 } from 'typeorm-transactional';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './product/product.module';
+import { VariantModule } from './variant/variant.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ProductModule } from './product/product.module';
     }),
     CategoryModule,
     ProductModule,
+    VariantModule,
   ],
   providers: [],
   exports: [],

@@ -5,6 +5,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Relation,
 } from 'typeorm';
 import { Category } from '../../category/entities/category.entity';
 import { ProductType } from '../enums/product-type.enum';
@@ -53,7 +54,7 @@ export class Product extends AbstractEntity {
     eager: true,
     nullable: true,
   })
-  category: Category;
+  category: Relation<Category>;
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt: Date;
 }

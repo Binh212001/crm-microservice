@@ -1,5 +1,11 @@
 import { AbstractEntity } from 'apps/inventory-service/src/database/entities/abstract.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Relation,
+} from 'typeorm';
 import { Product } from '../../product/entities/product.entity';
 
 @Entity()
@@ -14,5 +20,5 @@ export class Category extends AbstractEntity {
   description: string;
 
   @OneToMany(() => Product, (product) => product.category)
-  products: Product[];
+  products: Relation<Product>[];
 }

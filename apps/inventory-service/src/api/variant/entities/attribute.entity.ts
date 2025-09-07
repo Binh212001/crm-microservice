@@ -1,14 +1,22 @@
-// import { AbstractEntity } from 'apps/inventory-service/src/database/entities/abstract.entity';
-// import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AbstractEntity } from 'apps/inventory-service/src/database/entities/abstract.entity';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Relation,
+} from 'typeorm';
+import { Value } from './value.entity';
 
-// @Entity()
-// export class Product extends AbstractEntity {
-//   @PrimaryGeneratedColumn()
-//   id: number;
+@Entity()
+export class Attribute extends AbstractEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-//   @Column({ type: 'varchar' })
-//   name: string;
-
-//   @Column({ type: 'varchar' })
-//   description: string;
-// }
+  @Column({ type: 'varchar' })
+  name: string;
+  @OneToMany(() => Value, (value) => value.attribute, {
+    eager: true,
+  })
+  values: Relation<Value>[];
+}
