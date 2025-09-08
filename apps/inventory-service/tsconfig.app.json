@@ -3,7 +3,9 @@
   "compilerOptions": {
     "declaration": false,
     "outDir": "../../dist/apps/inventory-service",
-    "rootDir": "src"
+    "paths": {
+      "@libs/*": ["../../dist/apps/libs/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

@@ -17,11 +17,14 @@ import { ProductResDto } from './dto/product-res.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
+import { Role } from 'apps/libs/decorators/role.decorator';
+import { RoleEnum } from 'apps/user-service/src/api/user/enums/role';
 
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @Role(RoleEnum.ADMIN)
   @Post()
   async create(@Body() createCategoryDto: CreateProductDto): Promise<Product> {
     return await this.productService.create(createCategoryDto);
@@ -39,6 +42,7 @@ export class ProductController {
     return await this.productService.findOne(id);
   }
 
+  @Role(RoleEnum.ADMIN)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -47,6 +51,7 @@ export class ProductController {
     return await this.productService.update(id, updateCategoryDto);
   }
 
+  @Role(RoleEnum.ADMIN)
   @Delete(':id')
   async remove(
     @Param('id', ParseIntPipe) id: number,

@@ -17,6 +17,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {}
+    "rootDir": "./",
+    "paths": {
+      "@libs/*": ["apps/libs/*"]
+    }
   }
 }

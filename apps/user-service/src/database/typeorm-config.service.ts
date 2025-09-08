@@ -1,3 +1,4 @@
+import { User } from './../api/user/entities/user.entity';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { Injectable } from '@nestjs/common';
@@ -14,7 +15,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       port: Number(process.env.DATABASE_PORT) || 25432,
       username: process.env.DATABASE_USERNAME || 'admin',
       password: process.env.DATABASE_PASSWORD || '123456',
-      database: process.env.DATABASE_NAME || 'inventory',
+      database: process.env.DATABASE_NAME || 'user',
       synchronize: true,
       dropSchema: false,
       keepConnectionAlive: true,

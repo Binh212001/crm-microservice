@@ -4,7 +4,7 @@ import { IsOptional, IsString } from 'class-validator';
 export class UserReqDto extends PaginationReq {
   @IsOptional()
   @IsString()
-  name?: string;
+  fullName?: string;
   @IsOptional()
   @IsString()
   email?: string;

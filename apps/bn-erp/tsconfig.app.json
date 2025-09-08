@@ -3,7 +3,9 @@
   "compilerOptions": {
     "declaration": false,
     "outDir": "../../dist/apps/bn-erp",
-    "rootDir": "src"
+    "paths": {
+      "@libs/*": ["../../dist/apps/libs/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
