@@ -44,7 +44,7 @@ export class OpportunityService {
         `Opportunity with email ${dto.email} already exists`,
       );
     }
-    if (dto.opportunityLines) {
+    if (dto.opportunityLines && dto.opportunityLines.length > 0) {
       const productIds = dto.opportunityLines.map((item) => item.productId);
       const product = await firstValueFrom(
         this.clientProxy.send(
@@ -63,14 +63,16 @@ export class OpportunityService {
     });
     const opportunitySaved = await this.opportunityRepository.save(opportunity);
 
-    await this.opportunityLineRepository.save(
-      dto.opportunityLines.map((item) =>
-        this.opportunityLineRepository.create({
-          ...item,
-          opportunity: opportunitySaved,
-        }),
-      ),
-    );
+    if (dto.opportunityLines && dto.opportunityLines.length > 0) {
+      await this.opportunityLineRepository.save(
+        dto.opportunityLines.map((item) =>
+          this.opportunityLineRepository.create({
+            ...item,
+            opportunity: opportunitySaved,
+          }),
+        ),
+      );
+    }
     return opportunitySaved;
   }
 
@@ -153,21 +155,11 @@ export class OpportunityService {
     const opportunity = await this.opportunityRepository.findOne({
       where: { id },
     });
-    if (!opportunity)
+    if (!opportunity) {
       throw new NotFoundException(`Opportunity with ID ${id} not found`);
-
-    if (dto.email && dto.email !== opportunity.email) {
-      const existing = await this.opportunityRepository.findOne({
-        where: { email: dto.email },
-      });
-      if (existing) {
-        throw new BadRequestException(
-          `Opportunity with email ${dto.email} already exists`,
-        );
-      }
     }
 
-    if (dto.opportunityLines) {
+    if (dto.opportunityLines && dto.opportunityLines.length > 0) {
       const productIds = dto.opportunityLines.map((item) => item.productId);
       const product = await firstValueFrom(
         this.clientProxy.send(
@@ -179,6 +171,7 @@ export class OpportunityService {
         throw new NotFoundException(`Product with ID ${productIds} not found`);
       }
       await this.opportunityLineRepository.remove(opportunity.opportunityLines);
+
       await this.opportunityLineRepository.save(
         dto.opportunityLines.map((item) =>
           this.opportunityLineRepository.create({

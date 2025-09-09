@@ -40,7 +40,7 @@ export class LeadService {
         `Lead with email ${dto.email} already exists`,
       );
     }
-    if (dto.leadLines) {
+    if (dto.leadLines && dto.leadLines.length > 0) {
       const productIds = dto.leadLines.map((item) => item.productId);
       const product = await firstValueFrom(
         this.clientProxy.send(
@@ -60,14 +60,16 @@ export class LeadService {
 
     const leadSaved = await this.leadRepository.save(newLead);
     //Save lead lines
-    await this.leadLineRepository.save(
-      dto.leadLines.map((item) =>
-        this.leadLineRepository.create({
-          productId: item.productId,
-          lead: leadSaved,
-        }),
-      ),
-    );
+    if (dto.leadLines && dto.leadLines.length > 0) {
+      await this.leadLineRepository.save(
+        dto.leadLines.map((item) =>
+          this.leadLineRepository.create({
+            productId: item.productId,
+            lead: leadSaved,
+          }),
+        ),
+      );
+    }
 
     return leadSaved;
   }
@@ -165,19 +167,7 @@ export class LeadService {
       throw new NotFoundException(`Lead with ID ${id} not found`);
     }
 
-    // Check if email is being updated and if it already exists
-    if (updateLeadDto.email && updateLeadDto.email !== lead.email) {
-      const existingLead = await this.leadRepository.findOne({
-        where: { email: updateLeadDto.email },
-      });
-      if (existingLead) {
-        throw new ConflictException(
-          `Lead with email ${updateLeadDto.email} already exists`,
-        );
-      }
-    }
-
-    if (updateLeadDto.leadLines) {
+    if (updateLeadDto.leadLines && updateLeadDto.leadLines.length > 0) {
       const productIds = updateLeadDto.leadLines.map((item) => item.productId);
       const product = await firstValueFrom(
         this.clientProxy.send(
@@ -185,10 +175,7 @@ export class LeadService {
           productIds,
         ),
       );
-      if (!product || product.length !== productIds.length) {
-        throw new NotFoundException(`Product with ID ${productIds} not found`);
-      }
-      await this.leadLineRepository.remove(lead.leadLines);
+
       await this.leadLineRepository.save(
         updateLeadDto.leadLines.map((item) =>
           this.leadLineRepository.create({
