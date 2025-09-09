@@ -157,4 +157,20 @@ export class ProductService {
     );
     return productVariants;
   }
+
+  async findByIds(ids: number[]): Promise<ProductResDto[]> {
+    const products = await this.productRepository.find({
+      where: { id: In(ids) },
+    });
+    return plainToInstance(ProductResDto, products);
+  }
+
+  async findOneById(id: number): Promise<ProductResDto | null> {
+    const product = await this.productRepository.findOne({ where: { id } });
+    if (!product) {
+      return null;
+    }
+
+    return plainToInstance(ProductResDto, product);
+  }
 }

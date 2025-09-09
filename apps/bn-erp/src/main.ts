@@ -28,6 +28,14 @@ async function bootstrap() {
       pathRewrite: { '^/user-service': 'user-service' },
     }),
   );
+  app.use(
+    '/lead-service',
+    createProxyMiddleware({
+      target: 'http://localhost:3005',
+      changeOrigin: true,
+      pathRewrite: { '^/lead-service': 'lead-service' },
+    }),
+  );
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
