@@ -61,5 +61,5 @@ export class OpportunityResDto {
 
   @Expose()
   @Type(() => ProductResDto)
-  product: ProductResDto;
+  products: ProductResDto[];
 }

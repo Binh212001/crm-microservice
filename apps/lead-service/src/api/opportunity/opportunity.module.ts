@@ -3,6 +3,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { OpportunityController } from './opportunity.controller';
 import { OpportunityService } from './opportunity.service';
 import { OpportunityRepository } from './repositories/opportunity.repository';
+import { OpportunityLineRepository } from './repositories/opportunity-line.repository';
 
 @Module({
   imports: [
@@ -19,7 +20,15 @@ import { OpportunityRepository } from './repositories/opportunity.repository';
     ]),
   ],
   controllers: [OpportunityController],
-  providers: [OpportunityService, OpportunityRepository],
-  exports: [OpportunityService, OpportunityRepository],
+  providers: [
+    OpportunityService,
+    OpportunityRepository,
+    OpportunityLineRepository,
+  ],
+  exports: [
+    OpportunityService,
+    OpportunityRepository,
+    OpportunityLineRepository,
+  ],
 })
 export class OpportunityModule {}

@@ -1,11 +1,11 @@
 import { BaseRepository } from '../../../database/repositories/base.repository';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { Opportunity } from '../entities/opportunity.entity';
+import { LeadLine } from '../entities/lead-line.entity';
 
 @Injectable()
-export class OpportunityRepository extends BaseRepository<Opportunity> {
+export class LeadLineRepository extends BaseRepository<LeadLine> {
   constructor(private readonly dataSource: DataSource) {
-    super(Opportunity, dataSource.manager);
+    super(LeadLine, dataSource.manager);
   }
 }

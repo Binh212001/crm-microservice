@@ -7,6 +7,7 @@ import {
   IsNumber,
 } from 'class-validator';
 import { LeadStatus } from '../enums/lead-status';
+import { Type } from 'class-transformer';
 
 export class CreateLeadDto {
   @IsString()
@@ -65,7 +66,13 @@ export class CreateLeadDto {
   @IsOptional()
   status?: LeadStatus;
 
-  @IsNumber()
   @IsOptional()
+  @Type(() => LeadLineResDto)
+  leadLines: LeadLineResDto[];
+}
+
+export class LeadLineResDto {
+  @IsNumber()
+  @IsNotEmpty()
   productId: number;
 }

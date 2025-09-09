@@ -17,11 +17,14 @@ import {
 import { LeadStatus } from './enums/lead-status';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { LeadLineRepository } from './repositories/lead-line.repository';
+import { LeadLine } from './entities/lead-line.entity';
 
 @Injectable()
 export class LeadService {
   constructor(
     private leadRepository: LeadRepository,
+    private leadLineRepository: LeadLineRepository,
     @Inject('PRODUCT_SERVICE')
     private clientProxy: ClientProxy,
   ) {}
@@ -37,17 +40,16 @@ export class LeadService {
         `Lead with email ${dto.email} already exists`,
       );
     }
-    if (dto.productId) {
+    if (dto.leadLines) {
+      const productIds = dto.leadLines.map((item) => item.productId);
       const product = await firstValueFrom(
         this.clientProxy.send(
-          { cmd: 'get_product_by_id', queue: 'PRODUCT_QUEUE' },
-          dto.productId,
+          { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
+          productIds,
         ),
       );
-      if (!product) {
-        throw new NotFoundException(
-          `Product with ID ${dto.productId} not found`,
-        );
+      if (!product || product.length !== productIds.length) {
+        throw new NotFoundException(`Product with IDs ${productIds} not found`);
       }
     }
 
@@ -56,7 +58,18 @@ export class LeadService {
       status: dto.status || LeadStatus.NEW,
     });
 
-    return await this.leadRepository.save(newLead);
+    const leadSaved = await this.leadRepository.save(newLead);
+    //Save lead lines
+    await this.leadLineRepository.save(
+      dto.leadLines.map((item) =>
+        this.leadLineRepository.create({
+          productId: item.productId,
+          lead: leadSaved,
+        }),
+      ),
+    );
+
+    return leadSaved;
   }
 
   async findAll(
@@ -89,22 +102,30 @@ export class LeadService {
       where,
     });
 
-    const productId = data.map((lead) => lead.productId);
+    const productIds: number[] = [];
+    data.forEach((lead) => {
+      lead.leadLines.forEach((item: LeadLine) => {
+        productIds.push(item.productId);
+      });
+    });
 
     const products = await firstValueFrom(
       this.clientProxy.send(
         { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
-        productId,
+        productIds,
       ),
     );
 
     const leadResDto = data.map((lead) => {
-      const product = products.find(
-        (product: any) => product.id === lead.productId,
+      // get productIds from leadLines and get products by productIds
+      const productIds = lead.leadLines.map((item: LeadLine) => item.productId);
+      const product = products.filter((product: any) =>
+        productIds.includes(product.id),
       );
+      // assign products to lead
       return plainToInstance(LeadResDto, {
         ...lead,
-        product,
+        products: product,
       });
     });
 
@@ -121,17 +142,17 @@ export class LeadService {
     if (!lead) {
       throw new NotFoundException(`Lead with ID ${id} not found`);
     }
-    const product =
-      lead.productId &&
-      (await firstValueFrom(
-        this.clientProxy.send(
-          { cmd: 'get_product_by_id', queue: 'PRODUCT_QUEUE' },
-          lead.productId,
-        ),
-      ));
+
+    const products = await firstValueFrom(
+      this.clientProxy.send(
+        { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
+        lead.leadLines.map((item) => item.productId),
+      ),
+    );
+
     return plainToInstance(LeadResDto, {
       ...lead,
-      product,
+      products,
     });
   }
 
@@ -156,19 +177,28 @@ export class LeadService {
       }
     }
 
-    if (updateLeadDto.productId) {
+    if (updateLeadDto.leadLines) {
+      const productIds = updateLeadDto.leadLines.map((item) => item.productId);
       const product = await firstValueFrom(
         this.clientProxy.send(
-          { cmd: 'get_product_by_id', queue: 'PRODUCT_QUEUE' },
-          updateLeadDto.productId,
+          { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
+          productIds,
         ),
       );
-      if (!product) {
-        throw new NotFoundException(
-          `Product with ID ${updateLeadDto.productId} not found`,
-        );
+      if (!product || product.length !== productIds.length) {
+        throw new NotFoundException(`Product with ID ${productIds} not found`);
       }
+      await this.leadLineRepository.remove(lead.leadLines);
+      await this.leadLineRepository.save(
+        updateLeadDto.leadLines.map((item) =>
+          this.leadLineRepository.create({
+            productId: item.productId,
+            lead: lead,
+          }),
+        ),
+      );
     }
+
     Object.assign(lead, updateLeadDto);
     const savedLead = await this.leadRepository.save(lead);
     return plainToInstance(UpdateDeleteResDto, { id: savedLead.id });
