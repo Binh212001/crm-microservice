@@ -5,6 +5,7 @@ import { LeadService } from './lead.service';
 import { LeadRepository } from './repositories/lead.repository';
 import { Lead } from './entities/lead.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { LeadLineRepository } from './repositories/lead-line.repository';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ]),
   ],
   controllers: [LeadController],
-  providers: [LeadService, LeadRepository],
-  exports: [LeadService, LeadRepository],
+  providers: [LeadService, LeadRepository, LeadLineRepository],
+  exports: [LeadService, LeadRepository, LeadLineRepository],
 })
 export class LeadModule {}

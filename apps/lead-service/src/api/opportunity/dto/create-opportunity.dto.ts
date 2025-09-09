@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsEmail,
   IsEnum,
   IsNotEmpty,
@@ -7,6 +8,7 @@ import {
   IsString,
 } from 'class-validator';
 import { OpportunityStatus } from '../enums/opportunity-status';
+import { Type } from 'class-transformer';
 
 export class CreateOpportunityDto {
   @IsString()
@@ -66,10 +68,29 @@ export class CreateOpportunityDto {
   status?: OpportunityStatus;
 
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   leadId: number;
+
+  @IsArray()
+  @IsOptional()
+  @Type(() => CreateOpportunityLineDto)
+  opportunityLines: CreateOpportunityLineDto[];
+}
+
+export class CreateOpportunityLineDto {
+  @IsNumber()
+  @IsNotEmpty()
+  productId: number;
 
   @IsNumber()
   @IsOptional()
-  productId: number;
+  quantity: number;
+
+  @IsNumber()
+  @IsOptional()
+  variantId: number;
+
+  @IsNumber()
+  @IsOptional()
+  total: number;
 }

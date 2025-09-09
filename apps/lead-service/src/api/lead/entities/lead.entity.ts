@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { LeadStatus } from '../enums/lead-status';
 import { Opportunity } from '../../opportunity/entities/opportunity.entity';
+import { LeadLine } from './lead-line.entity';
 
 @Entity('leads')
 export class Lead extends AbstractEntity {
@@ -60,8 +61,8 @@ export class Lead extends AbstractEntity {
   })
   status: LeadStatus;
 
-  @Column({ nullable: true })
-  productId: number;
+  @OneToMany(() => LeadLine, (leadLine) => leadLine.lead, { eager: true })
+  leadLines: Relation<LeadLine>[];
 
   @OneToMany(() => Opportunity, (opportunity) => opportunity.lead)
   opportunities: Relation<Opportunity>[];

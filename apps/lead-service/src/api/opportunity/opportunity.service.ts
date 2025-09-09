@@ -22,14 +22,19 @@ import {
 import { Opportunity } from './entities/opportunity.entity';
 import { OpportunityStatus } from './enums/opportunity-status';
 import { OpportunityRepository } from './repositories/opportunity.repository';
+import { OpportunityLine } from './entities/opportunity-line.entity';
+import { OpportunityLineRepository } from './repositories/opportunity-line.repository';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class OpportunityService {
   constructor(
     private readonly opportunityRepository: OpportunityRepository,
+    private readonly opportunityLineRepository: OpportunityLineRepository,
     @Inject('PRODUCT_SERVICE') private readonly clientProxy: ClientProxy,
   ) {}
 
+  @Transactional()
   async create(dto: CreateOpportunityDto): Promise<Opportunity> {
     const existing = await this.opportunityRepository.findOne({
       where: { email: dto.email },
@@ -39,38 +44,45 @@ export class OpportunityService {
         `Opportunity with email ${dto.email} already exists`,
       );
     }
-
-    if (dto.productId) {
+    if (dto.opportunityLines) {
+      const productIds = dto.opportunityLines.map((item) => item.productId);
       const product = await firstValueFrom(
         this.clientProxy.send(
-          { cmd: 'get_product_by_id', queue: 'PRODUCT_QUEUE' },
-          dto.productId,
+          { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
+          productIds,
         ),
       );
-      if (!product) {
-        throw new BadRequestException(
-          `Product with ID ${dto.productId} not found`,
-        );
+      if (!product || product.length !== productIds.length) {
+        throw new NotFoundException(`Product with IDs ${productIds} not found`);
       }
     }
 
     const opportunity = this.opportunityRepository.create({
       ...dto,
-      status: dto.status || OpportunityStatus.QUALIFIED,
+      status: dto.status,
     });
-    return await this.opportunityRepository.save(opportunity);
+    const opportunitySaved = await this.opportunityRepository.save(opportunity);
+
+    await this.opportunityLineRepository.save(
+      dto.opportunityLines.map((item) =>
+        this.opportunityLineRepository.create({
+          ...item,
+          opportunity: opportunitySaved,
+        }),
+      ),
+    );
+    return opportunitySaved;
   }
 
   async findAll(
     req: OpportunityReqDto,
   ): Promise<PaginationResponse<OpportunityResDto>> {
-    const { page, limit, order, name, email, status, leadId } = req;
+    const { page, limit, order, name, email, status } = req;
     const where: FindOptionsWhere<Opportunity> = {};
 
     if (name) where.name = Like(`%${name}%`);
     if (email) where.email = Like(`%${email}%`);
     if (status) where.status = status as OpportunityStatus;
-    if (leadId) where.leadId = leadId;
 
     const { data, total } = await pagination({
       page,
@@ -80,26 +92,41 @@ export class OpportunityService {
       where,
     });
 
-    const productIds = data.map((o) => o.productId).filter(Boolean);
-    const products = productIds.length
-      ? await firstValueFrom(
-          this.clientProxy.send(
-            { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
-            productIds,
-          ),
-        )
-      : [];
+    const productIds: number[] = [];
+    data.forEach((opportunity) => {
+      opportunity.opportunityLines.forEach((item: OpportunityLine) => {
+        productIds.push(item.productId);
+      });
+    });
 
-    const res = data.map((o) => {
-      const product = products.find((p: any) => p.id === o.productId);
-      return plainToInstance(OpportunityResDto, { ...o, product });
+    const products = await firstValueFrom(
+      this.clientProxy.send(
+        { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
+        productIds,
+      ),
+    );
+
+    const opportunityResDto = data.map((opportunity) => {
+      // get productIds from opportunityLines
+      const productIds = opportunity.opportunityLines.map(
+        (item: OpportunityLine) => item.productId,
+      );
+      // get products by productIds in opportunityLines
+      const product = products.filter((product: any) =>
+        productIds.includes(product.id),
+      );
+      // assign products to opportunity
+      return plainToInstance(OpportunityResDto, {
+        ...opportunity,
+        products: product,
+      });
     });
 
     return plainToInstance(PaginationResponse<OpportunityResDto>, {
       page: page ?? 1,
       limit: limit ?? 20,
       total,
-      data: res,
+      data: opportunityResDto,
     });
   }
 
@@ -109,17 +136,14 @@ export class OpportunityService {
     });
     if (!opportunity)
       throw new NotFoundException(`Opportunity with ID ${id} not found`);
-
-    const product =
-      opportunity.productId &&
-      (await firstValueFrom(
-        this.clientProxy.send(
-          { cmd: 'get_product_by_id', queue: 'PRODUCT_QUEUE' },
-          opportunity.productId,
-        ),
-      ));
-
-    return plainToInstance(OpportunityResDto, { ...opportunity, product });
+    const productIds = opportunity.opportunityLines.map((o) => o.productId);
+    const products = await firstValueFrom(
+      this.clientProxy.send(
+        { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
+        productIds,
+      ),
+    );
+    return plainToInstance(OpportunityResDto, { ...opportunity, products });
   }
 
   async update(
@@ -143,17 +167,26 @@ export class OpportunityService {
       }
     }
 
-    if (dto.productId) {
+    if (dto.opportunityLines) {
+      const productIds = dto.opportunityLines.map((item) => item.productId);
       const product = await firstValueFrom(
         this.clientProxy.send(
-          { cmd: 'get_product_by_id', queue: 'PRODUCT_QUEUE' },
-          dto.productId,
+          { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
+          productIds,
         ),
       );
-      if (!product)
-        throw new BadRequestException(
-          `Product with ID ${dto.productId} not found`,
-        );
+      if (!product || product.length !== productIds.length) {
+        throw new NotFoundException(`Product with ID ${productIds} not found`);
+      }
+      await this.opportunityLineRepository.remove(opportunity.opportunityLines);
+      await this.opportunityLineRepository.save(
+        dto.opportunityLines.map((item) =>
+          this.opportunityLineRepository.create({
+            ...item,
+            opportunity: opportunity,
+          }),
+        ),
+      );
     }
 
     Object.assign(opportunity, dto);

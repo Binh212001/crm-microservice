@@ -1,4 +1,4 @@
-import { Expose, Type } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { LeadStatus } from '../enums/lead-status';
 import { ProductResDto } from 'apps/inventory-service/src/api/product/dto/product-res.dto';
 
@@ -58,5 +58,5 @@ export class LeadResDto {
 
   @Expose()
   @Type(() => ProductResDto)
-  product: ProductResDto;
+  products: ProductResDto[];
 }

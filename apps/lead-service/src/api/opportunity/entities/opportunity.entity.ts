@@ -3,11 +3,13 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
 } from 'typeorm';
 import { Lead } from '../../lead/entities/lead.entity';
 import { OpportunityStatus } from '../enums/opportunity-status';
+import { OpportunityLine } from './opportunity-line.entity';
 
 @Entity('opportunities')
 export class Opportunity extends AbstractEntity {
@@ -55,12 +57,16 @@ export class Opportunity extends AbstractEntity {
   @Column({ type: 'varchar', default: OpportunityStatus.QUALIFIED })
   status: OpportunityStatus;
 
-  @Column({ type: 'varchar' })
-  leadId: number;
-
-  @ManyToOne(() => Lead, (lead) => lead.opportunities)
+  @ManyToOne(() => Lead, (lead) => lead.opportunities, {
+    eager: true,
+    nullable: true,
+  })
   lead: Relation<Lead>;
 
-  @Column({ type: 'varchar' })
-  productId: number;
+  @OneToMany(
+    () => OpportunityLine,
+    (opportunityLine) => opportunityLine.opportunity,
+    { eager: true },
+  )
+  opportunityLines: Relation<OpportunityLine>[];
 }
