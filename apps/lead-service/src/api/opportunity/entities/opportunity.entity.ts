@@ -1,19 +1,18 @@
-import { AbstractEntity } from '../../../database/entities/abstract.entity';
+import { AbstractEntity } from 'apps/lead-service/src/database/entities/abstract.entity';
 import {
   Column,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
 } from 'typeorm';
-import { LeadStatus } from '../enums/lead-status';
-import { Opportunity } from '../../opportunity/entities/opportunity.entity';
+import { Lead } from '../../lead/entities/lead.entity';
+import { OpportunityStatus } from '../enums/opportunity-status';
 
-@Entity('leads')
-export class Lead extends AbstractEntity {
+@Entity('opportunities')
+export class Opportunity extends AbstractEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
@@ -53,16 +52,15 @@ export class Lead extends AbstractEntity {
   @Column({ type: 'varchar', length: 20, nullable: true })
   managerPhone?: string;
 
-  @Column({
-    type: 'enum',
-    enum: LeadStatus,
-    default: LeadStatus.NEW,
-  })
-  status: LeadStatus;
+  @Column({ type: 'varchar', default: OpportunityStatus.QUALIFIED })
+  status: OpportunityStatus;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar' })
+  leadId: number;
+
+  @ManyToOne(() => Lead, (lead) => lead.opportunities)
+  lead: Relation<Lead>;
+
+  @Column({ type: 'varchar' })
   productId: number;
-
-  @OneToMany(() => Opportunity, (opportunity) => opportunity.lead)
-  opportunities: Relation<Opportunity>[];
 }
