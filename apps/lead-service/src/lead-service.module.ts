@@ -6,6 +6,7 @@ import { StorageDriver } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { LeadModule } from './api/lead/lead.module';
+import { OpportunityModule } from './api/opportunity/opportunity.module';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 
 @Module({
@@ -24,6 +25,7 @@ import { TypeOrmConfigService } from './database/typeorm-config.service';
       },
     }),
     LeadModule,
+    OpportunityModule,
   ],
   controllers: [],
   providers: [],
