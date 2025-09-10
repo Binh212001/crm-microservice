@@ -19,6 +19,7 @@ import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
 import { Role } from 'apps/libs/decorators/role.decorator';
 import { RoleEnum } from 'apps/user-service/src/api/user/enums/role';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('products')
 export class ProductController {
@@ -57,5 +58,21 @@ export class ProductController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<UpdateDeleteResDto> {
     return await this.productService.remove(id);
+  }
+
+  @MessagePattern({
+    cmd: 'get_product_by_ids',
+    queue: 'PRODUCT_QUEUE',
+  })
+  async getProductByIds(@Payload() ids: number[]): Promise<ProductResDto[]> {
+    return await this.productService.findByIds(ids);
+  }
+
+  @MessagePattern({
+    cmd: 'get_product_by_id',
+    queue: 'PRODUCT_QUEUE',
+  })
+  async getProductById(@Payload() id: number): Promise<ProductResDto | null> {
+    return await this.productService.findOneById(id);
   }
 }
