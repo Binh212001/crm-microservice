@@ -33,6 +33,7 @@ export class OpportunityService {
     private readonly opportunityRepository: OpportunityRepository,
     private readonly opportunityLineRepository: OpportunityLineRepository,
     @Inject('PRODUCT_SERVICE') private readonly clientProxy: ClientProxy,
+    @Inject('ORDER_SERVICE') private readonly orderClientProxy: ClientProxy,
   ) {}
 
   @Transactional()
@@ -199,6 +200,16 @@ export class OpportunityService {
       throw new NotFoundException(`Opportunity with ID ${id} not found`);
     opportunity.status = status;
     const saved = await this.opportunityRepository.save(opportunity);
+    if (status === OpportunityStatus.QUATATION_SENT) {
+      this.clientProxy.emit(
+        { cmd: 'send_quotation', queue: 'EMAIL_QUEUE' },
+        opportunity,
+      );
+    }
+
+    if (status === OpportunityStatus.CLOSED_WON) {
+      this.orderClientProxy.emit('create_order', opportunity);
+    }
     return plainToInstance(UpdateDeleteResDto, { id: saved.id });
   }
 
@@ -214,7 +225,6 @@ export class OpportunityService {
 
   @OnEvent('lead.converted')
   async handleLeadConverted(lead: Lead): Promise<void> {
-    console.log('🚀 ~ OpportunityService ~ handleLeadConverted ~ lead:', lead);
     const { leadLines, ...rest } = lead;
     //create a new opportunity with the lead data
     const opportunity = this.opportunityRepository.create({

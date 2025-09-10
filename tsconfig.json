@@ -19,7 +19,9 @@
     "noFallthroughCasesInSwitch": false,
     "rootDir": "./",
     "paths": {
-      "@libs/*": ["apps/libs/*"]
+      "@libs/*": [
+        "apps/libs/*"
+      ]
     }
   }
 }

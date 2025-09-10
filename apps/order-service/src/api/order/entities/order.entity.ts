@@ -2,6 +2,7 @@ import { AbstractEntity } from '../../../database/entities/abstract.entity';
 import {
   Column,
   Entity,
+  BeforeInsert,
   OneToMany,
   PrimaryGeneratedColumn,
   Relation,
@@ -17,6 +18,8 @@ export class Order extends AbstractEntity {
   @Column({ type: 'varchar', length: 50, unique: true })
   orderNumber: string;
 
+  @Column({ type: 'int' })
+  customerId: number;
   @Column({ type: 'varchar', length: 255 })
   customerName: string;
 
@@ -26,19 +29,19 @@ export class Order extends AbstractEntity {
   @Column({ type: 'varchar', length: 20 })
   customerPhone: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   shippingAddress: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   shippingCity: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   shippingCountry: string;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 20, nullable: true })
   shippingPostalCode: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   billingAddress?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
@@ -89,4 +92,12 @@ export class Order extends AbstractEntity {
     cascade: true,
   })
   orderLines: Relation<OrderLine>[];
+  @BeforeInsert()
+  generateOrderNumber() {
+    const timestamp = Date.now().toString();
+    const random = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(3, '0');
+    this.orderNumber = `ORD-${timestamp}-${random}`;
+  }
 }

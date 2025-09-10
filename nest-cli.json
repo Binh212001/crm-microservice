@@ -17,7 +17,10 @@
       "sourceRoot": "apps/bn-erp/src",
       "compilerOptions": {
         "tsConfigPath": "apps/bn-erp/tsconfig.app.json",
-        "assets": ["**/*.json", "**/*.sql"],
+        "assets": [
+          "**/*.json",
+          "**/*.sql"
+        ],
         "watchAssets": true
       }
     },
@@ -30,6 +33,15 @@
         "tsConfigPath": "apps/bunny-cloud-service/tsconfig.app.json"
       }
     },
+    "customer-service": {
+      "type": "application",
+      "root": "apps/customer-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/customer-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/customer-service/tsconfig.app.json"
+      }
+    },
     "inventory-service": {
       "type": "application",
       "root": "apps/inventory-service",
@@ -37,7 +49,10 @@
       "sourceRoot": "apps/inventory-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/inventory-service/tsconfig.app.json",
-        "assets": ["**/*.json", "**/*.sql"],
+        "assets": [
+          "**/*.json",
+          "**/*.sql"
+        ],
         "watchAssets": true
       }
     },
@@ -48,6 +63,14 @@
       "sourceRoot": "apps/lead-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/lead-service/tsconfig.app.json"
+      }
+    },
+    "libs": {
+      "type": "library",
+      "root": "apps/libs",
+      "sourceRoot": "apps/libs",
+      "compilerOptions": {
+        "tsConfigPath": "apps/libs/tsconfig.app.json"
       }
     },
     "order-service": {
@@ -66,14 +89,6 @@
       "sourceRoot": "apps/user-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/user-service/tsconfig.app.json"
-      }
-    },
-    "libs": {
-      "type": "library",
-      "root": "apps/libs",
-      "sourceRoot": "apps/libs",
-      "compilerOptions": {
-        "tsConfigPath": "apps/libs/tsconfig.app.json"
       }
     }
   }

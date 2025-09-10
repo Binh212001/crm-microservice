@@ -17,6 +17,15 @@ import { OpportunityLineRepository } from './repositories/opportunity-line.repos
           queueOptions: { durable: false },
         },
       },
+      {
+        name: 'ORDER_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://guest:guest@localhost:5672'],
+          queue: 'ORDER_QUEUE',
+          queueOptions: { durable: false },
+        },
+      },
     ]),
   ],
   controllers: [OpportunityController],

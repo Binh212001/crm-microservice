@@ -1,5 +1,7 @@
+import { Customer } from './../../../../customer-service/src/api/customer/entities/customer.entity';
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -19,12 +21,17 @@ import { OrderRepository } from './repositories/order.repository';
 import { OrderLineRepository } from './repositories/order-line.repository';
 import { OrderLine } from './entities/order-line.entity';
 import { Transactional } from 'typeorm-transactional';
+import { Opportunity } from 'apps/lead-service/src/api/opportunity/entities/opportunity.entity';
+import { OpportunityLine } from 'apps/lead-service/src/api/opportunity/entities/opportunity-line.entity';
+import { firstValueFrom } from 'rxjs';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly orderRepository: OrderRepository,
     private readonly orderLineRepository: OrderLineRepository,
+    @Inject('CUSTOMER_SERVICE') private readonly clientProxy: ClientProxy,
   ) {}
 
   private generateOrderNumber(): string {
@@ -86,12 +93,12 @@ export class OrderService {
 
     // Create order lines
     const orderLines = dto.orderLines.map((lineDto) => {
-      const lineTotal = lineDto.quantity * lineDto.unitPrice;
+      const lineTotal = lineDto.quantity * lineDto.price;
 
       return this.orderLineRepository.create({
         ...lineDto,
         order: savedOrder,
-        totalPrice: lineTotal,
+        total: lineTotal,
       });
     });
 
@@ -118,12 +125,12 @@ export class OrderService {
       where.orderNumber = Like(`%${orderNumber}%`);
     }
 
-    if (customerName) {
-      where.customerName = Like(`%${customerName}%`);
-    }
-
     if (customerEmail) {
       where.customerEmail = Like(`%${customerEmail}%`);
+    }
+
+    if (customerName) {
+      where.customerName = Like(`%${customerName}%`);
     }
 
     if (status) {
@@ -187,5 +194,39 @@ export class OrderService {
 
     const savedOrder = await this.orderRepository.save(order);
     return plainToInstance(UpdateDeleteResDto, { id: savedOrder.id });
+  }
+
+  async createFromOpportunity(opportunity: Opportunity): Promise<Order> {
+    const customer = await firstValueFrom(
+      this.clientProxy.send(
+        { cmd: 'create_customer', queue: 'CUSTOMER_QUEUE' },
+        opportunity,
+      ),
+    );
+    const order = this.orderRepository.create({
+      customerId: customer.id,
+      customerName: customer.name,
+      customerEmail: opportunity.email,
+      customerPhone: opportunity.phone,
+      shippingAddress: opportunity.address,
+      shippingCity: opportunity.city,
+      shippingCountry: opportunity.country,
+      shippingPostalCode: opportunity.postalCode,
+      billingAddress: opportunity.address,
+      billingCity: opportunity.city,
+      billingCountry: opportunity.country,
+      billingPostalCode: opportunity.postalCode,
+      status: OrderStatus.DRAFT,
+    });
+    const savedOrder = await this.orderRepository.save(order);
+    await this.orderLineRepository.save(
+      opportunity.opportunityLines.map((line: OpportunityLine) => {
+        return this.orderLineRepository.create({
+          ...line,
+          order: savedOrder,
+        });
+      }),
+    );
+    return savedOrder;
   }
 }

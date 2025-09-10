@@ -17,6 +17,8 @@ import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderReqDto } from './dto/order-req.dto';
 import { OrderResDto } from './dto/order-res.dto';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import { Opportunity } from 'apps/lead-service/src/api/opportunity/entities/opportunity.entity';
 
 @Controller('orders')
 export class OrderController {
@@ -44,5 +46,10 @@ export class OrderController {
     @Body('status') status: OrderStatus,
   ): Promise<UpdateDeleteResDto> {
     return await this.orderService.updateStatus(id, status);
+  }
+
+  @EventPattern('create_order')
+  async createOrder(@Payload() opportunity: Opportunity): Promise<Order> {
+    return await this.orderService.createFromOpportunity(opportunity);
   }
 }
