@@ -7,6 +7,7 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 async function bootstrap() {
   initializeTransactionalContext();
   const app = await NestFactory.create(ApiModule);
+  app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)));
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
