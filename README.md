@@ -10,6 +10,7 @@ npn run start:dev
 npn run start:inventory:dev
 npn run start:bunny-cloud:dev
 npn run start:user:dev
+npn run start:order:dev
 
 <!-- build service -->
 
