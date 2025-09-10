@@ -1,17 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { plainToInstance } from 'class-transformer';
-import { UpdateDeleteResDto } from '../../comom/response/update-delete-res.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
-import { UserRepository } from './user.repository';
 import { FindOptionsWhere, Like } from 'typeorm';
 import {
   pagination,
   PaginationResponse,
 } from '../../comom/pagination/pagination';
-import { UserResDto } from './dto/user-res.dto';
+import { UpdateDeleteResDto } from '../../comom/response/update-delete-res.dto';
 import { UserReqDto } from './dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserResDto } from './dto/user-res.dto';
+import { User } from './entities/user.entity';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
@@ -34,10 +35,10 @@ export class UserService {
   async findAll(
     userReqDto: UserReqDto,
   ): Promise<PaginationResponse<UserResDto>> {
-    const { page, limit, order, name, email } = userReqDto;
+    const { page, limit, order, fullName, email } = userReqDto;
     const where: FindOptionsWhere<User> = {};
-    if (name) {
-      where.name = Like(`%${name}%`);
+    if (fullName) {
+      where.fullName = Like(`%${fullName}%`);
     }
 
     if (email) {

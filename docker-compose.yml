@@ -48,6 +48,17 @@ services:
       - sass-backend-network
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - '5672:5672' # Cổng AMQP
+      - '15672:15672' # Giao diện quản trị web
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - sass-backend-network
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -64,6 +75,7 @@ services:
 volumes:
   postgres_data:
   pgadmin_data:
+  rabbitmq_data:
 
 networks:
   sass-backend-network:

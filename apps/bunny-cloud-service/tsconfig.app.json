@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "outDir": "../../dist/apps/bunny-cloud-service"
+    "outDir": "../../dist/apps/bunny-cloud-service",
+    "paths": {
+      "@libs/*": ["../../dist/apps/libs/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

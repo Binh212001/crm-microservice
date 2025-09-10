@@ -17,10 +17,7 @@
       "sourceRoot": "apps/bn-erp/src",
       "compilerOptions": {
         "tsConfigPath": "apps/bn-erp/tsconfig.app.json",
-        "assets": [
-          "**/*.json",
-          "**/*.sql"
-        ],
+        "assets": ["**/*.json", "**/*.sql"],
         "watchAssets": true
       }
     },
@@ -40,10 +37,7 @@
       "sourceRoot": "apps/inventory-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/inventory-service/tsconfig.app.json",
-        "assets": [
-          "**/*.json",
-          "**/*.sql"
-        ],
+        "assets": ["**/*.json", "**/*.sql"],
         "watchAssets": true
       }
     },
@@ -72,6 +66,14 @@
       "sourceRoot": "apps/user-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/user-service/tsconfig.app.json"
+      }
+    },
+    "libs": {
+      "type": "library",
+      "root": "apps/libs",
+      "sourceRoot": "apps/libs",
+      "compilerOptions": {
+        "tsConfigPath": "apps/libs/tsconfig.app.json"
       }
     }
   }

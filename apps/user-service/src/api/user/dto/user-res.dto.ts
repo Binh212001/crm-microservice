@@ -1,18 +1,18 @@
 import { Expose } from 'class-transformer';
-import { Role } from '../enums/role';
+import { RoleEnum } from '../enums/role';
 import { IsArray, IsEnum } from 'class-validator';
 
 export class UserResDto {
   @Expose()
   id: number;
   @Expose()
-  name: string;
+  fullName: string;
   @Expose()
   email: string;
   @Expose()
   @IsArray()
-  @IsEnum(Role, { each: true })
-  role: Role[];
+  @IsEnum(RoleEnum, { each: true })
+  role: RoleEnum[];
   @Expose()
   status: string;
   @Expose()

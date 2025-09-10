@@ -1,11 +1,13 @@
-import { NestFactory } from '@nestjs/core';
-import { ApiModule } from './api/api.module';
+import { JwtAuthGuard } from 'apps/libs/jwt/jwt-auth.guard';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { initializeTransactionalContext } from 'typeorm-transactional';
+import { ApiModule } from './api/api.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   initializeTransactionalContext();
   const app = await NestFactory.create(ApiModule);
+  app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)));
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
