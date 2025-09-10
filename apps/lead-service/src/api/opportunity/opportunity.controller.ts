@@ -57,10 +57,10 @@ export class OpportunityController {
     return await this.opportunityService.update(id, dto);
   }
 
-  @Patch(':id/status')
+  @Patch(':id/:status')
   async updateStatus(
     @Param('id', ParseIntPipe) id: number,
-    @Body('status') status: OpportunityStatus,
+    @Param('status') status: OpportunityStatus,
   ): Promise<UpdateDeleteResDto> {
     return await this.opportunityService.updateStatus(id, status);
   }

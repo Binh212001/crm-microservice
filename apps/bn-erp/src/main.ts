@@ -45,6 +45,14 @@ async function bootstrap() {
       pathRewrite: { '^/order-service': 'order-service' },
     }),
   );
+  app.use(
+    '/opportunity-service',
+    createProxyMiddleware({
+      target: 'http://localhost:3007',
+      changeOrigin: true,
+      pathRewrite: { '^/opportunity-service': 'opportunity-service' },
+    }),
+  );
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

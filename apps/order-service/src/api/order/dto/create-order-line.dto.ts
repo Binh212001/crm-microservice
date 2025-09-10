@@ -12,10 +12,6 @@ export class CreateOrderLineDto {
   @IsNotEmpty()
   productId: number;
 
-  @IsString()
-  @IsNotEmpty()
-  productName: string;
-
   @IsNumber()
   @IsOptional()
   variantId?: number;
@@ -34,5 +30,11 @@ export class CreateOrderLineDto {
   @IsNotEmpty()
   @Min(0)
   @Type(() => Number)
-  unitPrice: number;
+  price: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  @Type(() => Number)
+  total: number;
 }

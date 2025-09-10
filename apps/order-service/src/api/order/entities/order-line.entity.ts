@@ -7,7 +7,6 @@ import {
   Relation,
 } from 'typeorm';
 import { Order } from './order.entity';
-import { FileResDto } from 'apps/inventory-service/src/comom/attachments/file.res';
 
 @Entity('order_lines')
 export class OrderLine extends AbstractEntity {
@@ -17,8 +16,8 @@ export class OrderLine extends AbstractEntity {
   @Column({ type: 'int' })
   productId: number;
 
-  @Column({ type: 'varchar', length: 255 })
-  productName: string;
+  @Column({ type: 'int', nullable: true })
+  quantity: number;
 
   @Column({ type: 'int', nullable: true })
   variantId?: number;
@@ -29,17 +28,11 @@ export class OrderLine extends AbstractEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   variantValue?: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  quantity: number;
+  @Column({ type: 'int', nullable: true })
+  price: number;
 
-  @Column({ type: 'jsonb', nullable: true })
-  image: FileResDto;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  unitPrice: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  totalPrice: number;
+  @Column({ type: 'int', nullable: true })
+  total: number;
 
   @ManyToOne(() => Order, (order) => order.orderLines, {
     onDelete: 'CASCADE',
