@@ -90,14 +90,11 @@ export class OrderService {
     // Create order lines
     const orderLines = dto.orderLines.map((lineDto) => {
       const lineTotal = lineDto.quantity * lineDto.unitPrice;
-      const lineDiscount =
-        (lineTotal * (lineDto.discountPercentage || 0)) / 100;
 
       return this.orderLineRepository.create({
         ...lineDto,
         order: savedOrder,
         totalPrice: lineTotal,
-        discountAmount: lineDiscount,
       });
     });
 

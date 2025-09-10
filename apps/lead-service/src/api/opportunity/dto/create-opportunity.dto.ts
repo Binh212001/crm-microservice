@@ -86,6 +86,18 @@ export class CreateOpportunityLineDto {
   @IsOptional()
   quantity: number;
 
+  @IsString()
+  @IsOptional()
+  productName: string;
+
+  @IsString()
+  @IsOptional()
+  productDescription: string;
+
+  @IsString()
+  @IsOptional()
+  variantName: string;
+
   @IsNumber()
   @IsOptional()
   variantId: number;

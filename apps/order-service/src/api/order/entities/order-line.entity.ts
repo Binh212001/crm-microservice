@@ -7,6 +7,7 @@ import {
   Relation,
 } from 'typeorm';
 import { Order } from './order.entity';
+import { FileResDto } from 'apps/inventory-service/src/comom/attachments/file.res';
 
 @Entity('order_lines')
 export class OrderLine extends AbstractEntity {
@@ -31,20 +32,14 @@ export class OrderLine extends AbstractEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   quantity: number;
 
+  @Column({ type: 'jsonb', nullable: true })
+  image: FileResDto;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   unitPrice: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   totalPrice: number;
-
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
-  discountPercentage: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  discountAmount: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  taxAmount: number;
 
   @ManyToOne(() => Order, (order) => order.orderLines, {
     onDelete: 'CASCADE',

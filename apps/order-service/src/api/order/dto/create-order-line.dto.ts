@@ -1,12 +1,11 @@
+import { Type } from 'class-transformer';
 import {
-  IsNumber,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
-  IsDecimal,
   Min,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class CreateOrderLineDto {
   @IsNumber()
@@ -40,16 +39,4 @@ export class CreateOrderLineDto {
   @Min(0)
   @Type(() => Number)
   unitPrice: number;
-
-  @IsNumber()
-  @IsOptional()
-  @Min(0)
-  @Type(() => Number)
-  discountPercentage?: number = 0;
-
-  @IsNumber()
-  @IsOptional()
-  @Min(0)
-  @Type(() => Number)
-  taxAmount?: number = 0;
 }
