@@ -6,11 +6,11 @@ npm install
 
 <!-- run service -->
 
-npn run start:dev
-npn run start:inventory:dev
-npn run start:bunny-cloud:dev
-npn run start:user:dev
-npn run start:order:dev
+npm run start:dev
+npm run start:inventory:dev
+npm run start:bunny-cloud:dev
+npm run start:user:dev
+npm run start:order:dev
 
 <!-- build service -->
 

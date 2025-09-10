@@ -10,12 +10,9 @@ import {
   PaginationResponse,
 } from '../../comom/pagination/pagination';
 import { UpdateDeleteResDto } from '../../comom/response/update-delete-res.dto';
-import {
-  CreateOrderDto,
-  OrderReqDto,
-  OrderResDto,
-  UpdateOrderDto,
-} from './dto';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { OrderReqDto } from './dto/order-req.dto';
+import { OrderResDto } from './dto/order-res.dto';
 import { Order } from './entities/order.entity';
 import { OrderStatus } from './enums/order-status.enum';
 import { OrderRepository } from './repositories/order.repository';

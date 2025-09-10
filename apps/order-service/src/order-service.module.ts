@@ -5,9 +5,8 @@ import { initializeTransactionalContext } from 'typeorm-transactional';
 import { StorageDriver } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
-import { OrderModule } from './api/order/order.module';
-import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { ApiModule } from './api/api.module';
+import { TypeOrmConfigService } from './database/typeorm-config.service';
 
 @Module({
   imports: [

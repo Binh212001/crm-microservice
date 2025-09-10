@@ -20,9 +20,6 @@ export class OrderLine extends AbstractEntity {
   @Column({ type: 'varchar', length: 255 })
   productName: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
-  productDescription?: string;
-
   @Column({ type: 'int', nullable: true })
   variantId?: number;
 

@@ -11,9 +11,6 @@ export class OrderLineResDto {
   productName: string;
 
   @Expose()
-  productDescription: string;
-
-  @Expose()
   variantId: number;
 
   @Expose()

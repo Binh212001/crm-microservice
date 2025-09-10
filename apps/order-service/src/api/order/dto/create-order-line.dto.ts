@@ -16,10 +16,6 @@ export class CreateOrderLineDto {
   @IsNotEmpty()
   productName: string;
 
-  @IsString()
-  @IsOptional()
-  productDescription?: string;
-
   @IsNumber()
   @IsOptional()
   variantId?: number;
