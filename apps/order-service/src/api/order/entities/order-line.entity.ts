@@ -24,7 +24,10 @@ export class OrderLine extends AbstractEntity {
   variantId?: number;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  variantName?: string;
+  variantAttribute?: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  variantValue?: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   quantity: number;

@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ConflictException,
   Inject,
+  BadRequestException,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { UpdateDeleteResDto } from '../../comom/response/update-delete-res.dto';
@@ -19,6 +20,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { LeadLineRepository } from './repositories/lead-line.repository';
 import { LeadLine } from './entities/lead-line.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class LeadService {
@@ -27,6 +29,7 @@ export class LeadService {
     private leadLineRepository: LeadLineRepository,
     @Inject('PRODUCT_SERVICE')
     private clientProxy: ClientProxy,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async create(dto: CreateLeadDto): Promise<Lead> {
@@ -206,11 +209,14 @@ export class LeadService {
   ): Promise<UpdateDeleteResDto> {
     const lead = await this.leadRepository.findOne({ where: { id } });
     if (!lead) {
-      throw new NotFoundException(`Lead with ID ${id} not found`);
+      throw new BadRequestException(`Lead with ID ${id} not found`);
     }
 
     lead.status = status;
     const savedLead = await this.leadRepository.save(lead);
+    if (status === LeadStatus.CONVERTED) {
+      this.eventEmitter.emit('lead.converted', savedLead);
+    }
     return plainToInstance(UpdateDeleteResDto, { id: savedLead.id });
   }
 }

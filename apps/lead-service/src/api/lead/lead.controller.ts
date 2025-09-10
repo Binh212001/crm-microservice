@@ -51,10 +51,10 @@ export class LeadController {
     return await this.leadService.update(id, updateLeadDto);
   }
 
-  @Patch(':id/status')
+  @Patch(':id/:status')
   async updateStatus(
     @Param('id', ParseIntPipe) id: number,
-    @Body('status') status: LeadStatus,
+    @Param('status') status: LeadStatus,
   ): Promise<UpdateDeleteResDto> {
     return await this.leadService.updateStatus(id, status);
   }

@@ -8,6 +8,7 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
 import { LeadModule } from './api/lead/lead.module';
 import { OpportunityModule } from './api/opportunity/opportunity.module';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { TypeOrmConfigService } from './database/typeorm-config.service';
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
+    EventEmitterModule.forRoot(),
     LeadModule,
     OpportunityModule,
   ],

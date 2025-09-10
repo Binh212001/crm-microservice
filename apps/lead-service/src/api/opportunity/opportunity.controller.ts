@@ -13,16 +13,15 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { OpportunityService } from './opportunity.service';
-import {
-  CreateOpportunityDto,
-  OpportunityReqDto,
-  OpportunityResDto,
-  UpdateOpportunityDto,
-} from './dto';
+
 import { PaginationResponse } from '../../comom/pagination/pagination';
 import { UpdateDeleteResDto } from '../../comom/response/update-delete-res.dto';
 import { OpportunityStatus } from './enums/opportunity-status';
 import { Opportunity } from './entities/opportunity.entity';
+import { CreateOpportunityDto } from './dto/create-opportunity.dto';
+import { OpportunityReqDto } from './dto/opportunity-req.dto';
+import { OpportunityResDto } from './dto/opportunity-res.dto';
+import { UpdateOpportunityDto } from './dto/update-opportunity.dto';
 
 @Controller('opportunities')
 export class OpportunityController {

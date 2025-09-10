@@ -13,18 +13,19 @@ import {
   PaginationResponse,
 } from '../../comom/pagination/pagination';
 import { UpdateDeleteResDto } from '../../comom/response/update-delete-res.dto';
-import {
-  CreateOpportunityDto,
-  OpportunityReqDto,
-  OpportunityResDto,
-  UpdateOpportunityDto,
-} from './dto';
+
+import { CreateOpportunityDto } from './dto/create-opportunity.dto';
+import { OpportunityReqDto } from './dto/opportunity-req.dto';
+import { OpportunityResDto } from './dto/opportunity-res.dto';
+import { UpdateOpportunityDto } from './dto/update-opportunity.dto';
 import { Opportunity } from './entities/opportunity.entity';
 import { OpportunityStatus } from './enums/opportunity-status';
 import { OpportunityRepository } from './repositories/opportunity.repository';
 import { OpportunityLine } from './entities/opportunity-line.entity';
 import { OpportunityLineRepository } from './repositories/opportunity-line.repository';
 import { Transactional } from 'typeorm-transactional';
+import { OnEvent } from '@nestjs/event-emitter';
+import { Lead } from '../lead/entities/lead.entity';
 
 @Injectable()
 export class OpportunityService {
@@ -209,5 +210,27 @@ export class OpportunityService {
       throw new NotFoundException(`Opportunity with ID ${id} not found`);
     await this.opportunityRepository.remove(opportunity);
     return plainToInstance(UpdateDeleteResDto, { id: opportunity.id });
+  }
+
+  @OnEvent('lead.converted')
+  async handleLeadConverted(lead: Lead): Promise<void> {
+    console.log('🚀 ~ OpportunityService ~ handleLeadConverted ~ lead:', lead);
+    const { leadLines, ...rest } = lead;
+    //create a new opportunity with the lead data
+    const opportunity = this.opportunityRepository.create({
+      ...rest,
+      status: OpportunityStatus.QUALIFIED,
+    });
+    await this.opportunityRepository.save(opportunity);
+    //create opportunity lines with the lead lines data
+    await this.opportunityLineRepository.save(
+      leadLines.map((line) => {
+        const { id, ...rest } = line;
+        return this.opportunityLineRepository.create({
+          ...rest,
+          opportunity: opportunity,
+        });
+      }),
+    );
   }
 }

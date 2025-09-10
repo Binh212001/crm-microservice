@@ -15,11 +15,6 @@ export class OpportunityLine extends AbstractEntity {
 
   @Column({ type: 'int' })
   productId: number;
-  @Column({ type: 'varchar', length: 255 })
-  productName: string;
-
-  @Column({ type: 'varchar', length: 500, nullable: true })
-  productDescription?: string;
 
   @Column({ type: 'int', nullable: true })
   quantity: number;
@@ -29,6 +24,12 @@ export class OpportunityLine extends AbstractEntity {
 
   @Column({ type: 'int', nullable: true })
   variantId: number;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  variantAttribute?: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  variantValue?: string;
 
   @Column({ type: 'int', nullable: true })
   total: number;
