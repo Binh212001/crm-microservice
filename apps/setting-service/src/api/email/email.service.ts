@@ -1,6 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { Opportunity } from 'apps/lead-service/src/api/opportunity/entities/opportunity.entity';
+import { Order } from 'apps/order-service/src/api/order/entities/order.entity';
 @Injectable()
 export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
@@ -14,6 +15,14 @@ export class EmailService {
         opportunity,
         generatedAt: new Date().toISOString(),
       },
+    });
+  }
+  async sendOrderEmail(order: Order): Promise<void> {
+    await this.mailerService.sendMail({
+      to: order.customerEmail,
+      subject: 'Order',
+      template: 'order.template.hbs',
+      context: { order },
     });
   }
 }

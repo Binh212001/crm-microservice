@@ -26,6 +26,9 @@ export class OpportunityLine extends AbstractEntity {
   variantId: number;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
+  productName?: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
   variantAttribute?: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })

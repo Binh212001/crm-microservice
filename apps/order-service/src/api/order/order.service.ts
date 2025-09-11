@@ -31,6 +31,8 @@ export class OrderService {
     private readonly orderLineRepository: OrderLineRepository,
     @Inject('CUSTOMER_SERVICE')
     private readonly clientProxy: ClientProxy,
+    @Inject('EMAIL_SERVICE')
+    private readonly emailClientProxy: ClientProxy,
   ) {}
 
   private generateOrderNumber(): string {
@@ -226,6 +228,8 @@ export class OrderService {
         });
       }),
     );
+
+    this.emailClientProxy.emit('send_order', savedOrder);
     return savedOrder;
   }
 }
