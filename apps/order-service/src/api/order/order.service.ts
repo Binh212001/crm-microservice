@@ -1,12 +1,16 @@
-import { Customer } from './../../../../customer-service/src/api/customer/entities/customer.entity';
 import {
   BadRequestException,
   Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { OpportunityLine } from 'apps/lead-service/src/api/opportunity/entities/opportunity-line.entity';
+import { Opportunity } from 'apps/lead-service/src/api/opportunity/entities/opportunity.entity';
 import { plainToInstance } from 'class-transformer';
-import { FindOptionsWhere, Like, Between } from 'typeorm';
+import { firstValueFrom } from 'rxjs';
+import { Between, FindOptionsWhere, Like } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 import {
   pagination,
   PaginationResponse,
@@ -17,21 +21,16 @@ import { OrderReqDto } from './dto/order-req.dto';
 import { OrderResDto } from './dto/order-res.dto';
 import { Order } from './entities/order.entity';
 import { OrderStatus } from './enums/order-status.enum';
-import { OrderRepository } from './repositories/order.repository';
 import { OrderLineRepository } from './repositories/order-line.repository';
-import { OrderLine } from './entities/order-line.entity';
-import { Transactional } from 'typeorm-transactional';
-import { Opportunity } from 'apps/lead-service/src/api/opportunity/entities/opportunity.entity';
-import { OpportunityLine } from 'apps/lead-service/src/api/opportunity/entities/opportunity-line.entity';
-import { firstValueFrom } from 'rxjs';
-import { ClientProxy } from '@nestjs/microservices';
+import { OrderRepository } from './repositories/order.repository';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly orderRepository: OrderRepository,
     private readonly orderLineRepository: OrderLineRepository,
-    @Inject('CUSTOMER_SERVICE') private readonly clientProxy: ClientProxy,
+    @Inject('CUSTOMER_SERVICE')
+    private readonly clientProxy: ClientProxy,
   ) {}
 
   private generateOrderNumber(): string {

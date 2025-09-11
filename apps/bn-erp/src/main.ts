@@ -53,6 +53,14 @@ async function bootstrap() {
       pathRewrite: { '^/opportunity-service': 'opportunity-service' },
     }),
   );
+  app.use(
+    '/setting-service',
+    createProxyMiddleware({
+      target: 'http://localhost:3008',
+      changeOrigin: true,
+      pathRewrite: { '^/setting-service': 'setting-service' },
+    }),
+  );
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

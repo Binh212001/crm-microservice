@@ -34,6 +34,7 @@ export class OpportunityService {
     private readonly opportunityLineRepository: OpportunityLineRepository,
     @Inject('PRODUCT_SERVICE') private readonly clientProxy: ClientProxy,
     @Inject('ORDER_SERVICE') private readonly orderClientProxy: ClientProxy,
+    @Inject('EMAIL_SERVICE') private readonly emailClientProxy: ClientProxy,
   ) {}
 
   @Transactional()
@@ -201,10 +202,7 @@ export class OpportunityService {
     opportunity.status = status;
     const saved = await this.opportunityRepository.save(opportunity);
     if (status === OpportunityStatus.QUATATION_SENT) {
-      this.clientProxy.emit(
-        { cmd: 'send_quotation', queue: 'EMAIL_QUEUE' },
-        opportunity,
-      );
+      this.emailClientProxy.emit('send_quotation', opportunity);
     }
 
     if (status === OpportunityStatus.CLOSED_WON) {

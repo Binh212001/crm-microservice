@@ -82,6 +82,15 @@
         "tsConfigPath": "apps/order-service/tsconfig.app.json"
       }
     },
+    "setting-service": {
+      "type": "application",
+      "root": "apps/setting-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/setting-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/setting-service/tsconfig.app.json"
+      }
+    },
     "user-service": {
       "type": "application",
       "root": "apps/user-service",

@@ -11,6 +11,7 @@ npm run start:inventory:dev
 npm run start:bunny-cloud:dev
 npm run start:user:dev
 npm run start:order:dev
+npm run start:customer:dev
 
 <!-- build service -->
 
