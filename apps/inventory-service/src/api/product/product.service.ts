@@ -41,6 +41,7 @@ export class ProductService {
       ...productDto,
       category: category,
     });
+
     //handle save product variants
     const productVariants = await this.createProductVariant(variants, product);
     await this.productVariantRepository.save(productVariants);
@@ -134,18 +135,13 @@ export class ProductService {
             `Attribute with ID ${variant.attributeId} not found`,
           );
         }
+
         const values = await this.valueRepository.find({
-          where: {
-            id: In(variant.valueIds),
-          },
+          where: { id: variant.valueId },
         });
-        if (
-          !values ||
-          values.length === 0 ||
-          values.length !== variant.valueIds.length
-        ) {
+        if (!values) {
           throw new NotFoundException(
-            `Values with IDs ${variant.valueIds} not found`,
+            `Values with ID ${variant.valueId} not found`,
           );
         }
         return this.productVariantRepository.create({

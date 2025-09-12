@@ -6,6 +6,7 @@ import Dashboard from '../app/dashboard/Dashboard';
 import Order from '../app/order/Order';
 import AddProduct from '../app/product/AddProduct';
 import Product from '../app/product/Product';
+import EditProduct from '../app/product/EditProduct';
 import { Layout } from '../common/layout';
 import UserProfile from '../app/user/UserProfile';
 import VariantPage from '../app/variant/variant';
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
       {
         path: '/add-product',
         Component: AddProduct,
+      },
+      {
+        path: '/product/:id',
+        Component: EditProduct,
       },
       {
         path: '/category',
