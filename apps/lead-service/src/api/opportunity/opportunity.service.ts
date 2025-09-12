@@ -206,6 +206,23 @@ export class OpportunityService {
     }
 
     if (status === OpportunityStatus.CLOSED_WON) {
+      const { opportunityLines, ...rest } = opportunity;
+      opportunityLines.map((item) => {
+        if (
+          !item.productId &&
+          !item.productName &&
+          !item.variantAttribute &&
+          !item.variantValue &&
+          !item.variantId &&
+          !item.quantity &&
+          !item.price &&
+          !item.total
+        ) {
+          throw new BadRequestException(
+            `Opportunity line with ID ${item.id} is invalid`,
+          );
+        }
+      });
       this.orderClientProxy.emit('create_order', opportunity);
     }
     return plainToInstance(UpdateDeleteResDto, { id: saved.id });
@@ -230,6 +247,7 @@ export class OpportunityService {
       status: OpportunityStatus.QUALIFIED,
     });
     await this.opportunityRepository.save(opportunity);
+
     //create opportunity lines with the lead lines data
     await this.opportunityLineRepository.save(
       leadLines.map((line) => {

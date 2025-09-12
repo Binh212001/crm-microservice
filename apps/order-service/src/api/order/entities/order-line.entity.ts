@@ -5,6 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  BeforeInsert,
 } from 'typeorm';
 import { Order } from './order.entity';
 
@@ -38,4 +39,9 @@ export class OrderLine extends AbstractEntity {
     onDelete: 'CASCADE',
   })
   order: Relation<Order>;
+
+  @BeforeInsert()
+  calculateTotal() {
+    this.total = this.price * this.quantity;
+  }
 }

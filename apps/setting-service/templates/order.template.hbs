@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Order</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .container {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .header {
+        border-bottom: 1px solid #eee;
+        margin-bottom: 16px;
+      }
+      .items {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .items th,
+      .items td {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      .muted {
+        color: #666;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='container'>
+      <div class='header'>
+        <h2>Order for {{order.orderNumber}}</h2>
+        <p class='muted'>Status: {{order.status}}</p>
+      </div>
+
+      <h3>Customer</h3>
+      <p>
+        {{order.customerName}}<br />
+        {{order.shippingAddress}}<br />
+        {{order.shippingCity}},
+        {{order.shippingCountry}}
+        {{order.shippingPostalCode}}<br />
+        Email:
+        {{order.customerEmail}}
+        | Phone:
+        {{order.customerPhone}}
+      </p>
+
+      <h3>Items</h3>
+      <table class='items'>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Product</th>
+            <th>Variant</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each order.orderLines}}
+            <tr>
+              <td>{{@index}}</td>
+              <td>{{this.productId}}</td>
+              <td>{{this.variantValue}}</td>
+              <td>{{this.quantity}}</td>
+              <td>{{this.price}}</td>
+              <td>{{this.total}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+      <p class='muted'>Generated at: {{generatedAt}}</p>
+    </div>
+  </body>
+</html>

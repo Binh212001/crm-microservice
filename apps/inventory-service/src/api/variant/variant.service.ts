@@ -66,25 +66,30 @@ export class VariantService {
   }
 
   async update(id: number, dto: UpdateVariantDto): Promise<UpdateDeleteResDto> {
-    const variant = await this.attributeRepository.findOne({ where: { id } });
+    const variant = await this.attributeRepository.findOne({
+      where: { id },
+      relations: ['values'],
+    });
     if (!variant) {
       throw new NotFoundException(`Variant with ID ${id} not found`);
     }
 
-    Object.assign(variant, {
-      ...dto,
-    });
-    //if has value remove all value and create new value
+    // Handle values update
     if (dto.values && dto.values.length > 0) {
-      await this.valueRepository.remove(variant.values);
-      const values = dto.values.map((value) =>
+      // Remove existing values
+      if (variant.values && variant.values.length > 0) {
+        await this.valueRepository.remove(variant.values);
+      }
+
+      // Create and save new values
+      const newValues = dto.values.map((value) =>
         this.valueRepository.create({
           name: value.name,
           color: value.color,
         }),
       );
-      const valueSaved = await this.valueRepository.save(values);
-      variant.values = valueSaved;
+      const savedValues = await this.valueRepository.save(newValues);
+      variant.values = savedValues;
     }
 
     await this.attributeRepository.save(variant);
