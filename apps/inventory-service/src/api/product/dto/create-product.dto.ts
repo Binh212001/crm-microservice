@@ -74,5 +74,5 @@ export class CreateProductVariantDto {
 
   @IsArray()
   @IsNotEmpty()
-  valueIds: number[];
+  valueId: number;
 }

@@ -58,9 +58,9 @@ export interface CreateProductReq {
   categoryId: number;
   variants: {
     attributeId: number;
-    valueIds: number[];
-  };
-  images: {
+    valueId: number;
+  }[];
+  images?: {
     type: string;
     size: number;
     name: string;
@@ -85,11 +85,11 @@ export interface UpdateProductReq {
   salesPrice: number;
   soldQuantity: number;
   categoryId: number;
-  variants: {
+  variants?: {
     attributeId: number;
-    valueIds: number[];
-  };
-  images: {
+    valueId: number;
+  }[];
+  images?: {
     type: string;
     size: number;
     name: string;
@@ -115,6 +115,7 @@ export const productApi = createApi({
         params,
       }),
     }),
+
     createProduct: builder.mutation({
       query: (data: CreateProductReq) => ({
         url: 'products',
@@ -128,13 +129,6 @@ export const productApi = createApi({
         method: 'DELETE',
       }),
     }),
-    updateProduct: builder.mutation({
-      query: ({ id, data }: { id: number; data: UpdateProductReq }) => ({
-        url: `products/${id}`,
-        method: 'PATCH',
-        body: data,
-      }),
-    }),
   }),
 });
 
@@ -142,5 +136,4 @@ export const {
   useGetProductsQuery,
   useCreateProductMutation,
   useDeleteProductMutation,
-  useUpdateProductMutation,
 } = productApi;
