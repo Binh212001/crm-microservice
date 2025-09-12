@@ -15,6 +15,8 @@ export class Attribute extends AbstractEntity {
 
   @Column({ type: 'varchar' })
   name: string;
-  @OneToMany(() => Value, (value) => value.attribute, {})
+  @OneToMany(() => Value, (value) => value.attribute, {
+    eager: true,
+  })
   values: Relation<Value>[];
 }

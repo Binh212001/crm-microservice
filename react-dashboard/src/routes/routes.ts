@@ -8,6 +8,7 @@ import AddProduct from '../app/product/AddProduct';
 import Product from '../app/product/Product';
 import { Layout } from '../common/layout';
 import UserProfile from '../app/user/UserProfile';
+import VariantPage from '../app/variant/variant';
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: '/category',
         Component: CategoryPage,
+      },
+      {
+        path: '/variant',
+        Component: VariantPage,
       },
 
       {

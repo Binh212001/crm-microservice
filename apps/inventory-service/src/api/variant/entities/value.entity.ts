@@ -19,8 +19,6 @@ export class Value extends AbstractEntity {
   @Column({ type: 'varchar', nullable: true })
   color: string;
 
-  @ManyToOne(() => Attribute, (attribute) => attribute.values, {
-    eager: true,
-  })
+  @ManyToOne(() => Attribute, (attribute) => attribute.values)
   attribute: Relation<Attribute>;
 }

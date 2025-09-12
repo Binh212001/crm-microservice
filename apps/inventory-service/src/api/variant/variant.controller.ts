@@ -25,7 +25,6 @@ import { Role } from 'apps/libs/decorators/role.decorator';
 export class VariantController {
   constructor(private readonly variantService: VariantService) {}
 
-  @Role(RoleEnum.ADMIN)
   @Post()
   async create(
     @Body(ValidationPipe) createCategoryDto: CreateVariantDto,
@@ -33,7 +32,6 @@ export class VariantController {
     return await this.variantService.create(createCategoryDto);
   }
 
-  @Role(RoleEnum.ADMIN)
   @Get()
   async findAll(
     @Query() variantReqDto: VariantReqDto,
@@ -41,13 +39,11 @@ export class VariantController {
     return await this.variantService.findAll(variantReqDto);
   }
 
-  @Role(RoleEnum.ADMIN)
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<VariantResDto> {
     return await this.variantService.findOne(id);
   }
 
-  @Role(RoleEnum.ADMIN)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -56,7 +52,6 @@ export class VariantController {
     return await this.variantService.update(id, updateCategoryDto);
   }
 
-  @Role(RoleEnum.ADMIN)
   @Delete(':id')
   async remove(
     @Param('id', ParseIntPipe) id: number,

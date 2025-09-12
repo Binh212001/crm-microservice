@@ -1,6 +1,7 @@
 import { FileResDto } from 'apps/inventory-service/src/comom/attachments/file.res';
-// import { CategoryResDto } from 'apps/inventory-service/src/comom/response/category-res.dto';
 import { Expose, Type } from 'class-transformer';
+import { CategoryResDto } from '../../category/dto/category-res.dto';
+import { VariantResDto } from '../../variant/dto/variant-res.dto';
 
 export class ProductResDto {
   @Expose()
@@ -33,9 +34,11 @@ export class ProductResDto {
   salesPrice: string;
   @Expose()
   soldQuantity: string;
-  // @Expose()
-  // category: CategoryResDto;
+  @Expose()
+  category: CategoryResDto;
   @Expose()
   @Type(() => FileResDto)
   images: FileResDto;
+  @Expose()
+  variants: VariantResDto[];
 }

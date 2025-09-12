@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
 export class CreateVariantDto {
   @IsString()
   @IsNotEmpty()
-  attribute: string;
+  name: string;
 
   @IsArray()
   @IsNotEmpty()

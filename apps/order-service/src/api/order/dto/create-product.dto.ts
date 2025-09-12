@@ -6,7 +6,7 @@ import {
   IsEnum,
   IsArray,
 } from 'class-validator';
-import { ProductType } from '../enums/product-type.enum';
+import { ProductType } from 'apps/inventory-service/src/api/product/enums/product-type.enum';
 import { IsNumber } from 'class-validator';
 import { FileResDto } from 'apps/inventory-service/src/comom/attachments/file.res';
 import { Type } from 'class-transformer';
