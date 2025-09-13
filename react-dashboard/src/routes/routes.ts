@@ -11,6 +11,8 @@ import { Layout } from '../common/layout';
 import UserProfile from '../app/user/UserProfile';
 import VariantPage from '../app/variant/variant';
 import EditUser from '../app/user/EditUser';
+import LeadPage from '../app/lead/Lead';
+import OportunityPage from '../app/oportunity/Oportunity';
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +55,14 @@ export const router = createBrowserRouter([
       {
         path: '/user/edit/:id',
         Component: EditUser,
+      },
+      {
+        path: '/lead',
+        Component: LeadPage,
+      },
+      {
+        path: '/oportunity',
+        Component: OportunityPage,
       },
       {
         path: '/add-user',
