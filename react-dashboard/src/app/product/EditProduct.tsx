@@ -180,13 +180,11 @@ function EditProduct() {
         ...(imageRes && { images: imageRes }),
       };
 
-      console.log('🚀 ~ handleSave ~ updateData:', updateData);
-      // await updateProduct({
-      //   id: Number(id),
-      //   data: updateData,
-      // }).unwrap();
+      await updateProduct({
+        id: Number(id),
+        data: updateData,
+      }).unwrap();
 
-      console.log('Product updated successfully');
       alert('Product updated successfully');
     } catch (error) {
       console.error('Error updating product:', error);

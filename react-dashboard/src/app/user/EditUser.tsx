@@ -11,12 +11,20 @@ import {
   OutlinedInput,
   Checkbox,
   ListItemText,
+  CircularProgress,
+  Alert,
+  FormControlLabel,
 } from '@mui/material';
-import { CreateUserReq, useCreateUserMutation } from '../../service/userApi';
+import {
+  UpdateUserReq,
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+} from '../../service/userApi';
 import { TextField } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-// Role options based on @file_context_0
+// Role options based on the existing pattern
 const ROLE_OPTIONS = [
   'ADMIN',
   'SALES',
@@ -27,9 +35,14 @@ const ROLE_OPTIONS = [
   'OTHERS',
 ];
 
-function AddUser() {
-  const [addUser] = useCreateUserMutation();
-  const [user, setUser] = useState<CreateUserReq>({
+function EditUser() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [updateUser] = useUpdateUserMutation();
+
+  const { data: userData, isLoading, error } = useGetUserByIdQuery(Number(id));
+
+  const [user, setUser] = useState<UpdateUserReq>({
     fullName: '',
     email: '',
     role: [],
@@ -37,7 +50,7 @@ function AddUser() {
     address: '',
     avatar: '',
     gender: false,
-    birthDate: new Date(),
+    birthDate: '',
     city: '',
     country: '',
     postalCode: '',
@@ -45,6 +58,28 @@ function AddUser() {
     department: '',
     position: '',
   });
+
+  // Update form when user data is loaded
+  useEffect(() => {
+    if (userData) {
+      setUser({
+        fullName: userData.fullName || '',
+        email: userData.email || '',
+        role: userData.role || [],
+        phone: userData.phone || '',
+        address: userData.address || '',
+        avatar: userData.avatar || '',
+        gender: userData.gender || false,
+        birthDate: userData.birthDate || '',
+        city: userData.city || '',
+        country: userData.country || '',
+        postalCode: userData.postalCode || '',
+        company: userData.company || '',
+        department: userData.department || '',
+        position: userData.position || '',
+      });
+    }
+  }, [userData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -63,30 +98,58 @@ function AddUser() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      await addUser(user).unwrap();
-      alert('User created successfully');
+      await updateUser({ id: Number(id), data: user }).unwrap();
+      alert('User updated successfully');
+      navigate('/user');
     } catch (error) {
-      console.error('Error creating user:', error);
+      console.error('Error updating user:', error);
       // @ts-ignore
-      alert(error.data?.message);
+      alert(error.data?.message || 'Failed to update user');
     }
   };
+
+  const handleCancel = () => {
+    navigate('/user');
+  };
+
+  if (isLoading) {
+    return (
+      <StyleBox>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="200px"
+        >
+          <CircularProgress />
+        </Box>
+      </StyleBox>
+    );
+  }
+
+  if (error) {
+    return (
+      <StyleBox>
+        <Alert severity="error">Failed to load user data.</Alert>
+      </StyleBox>
+    );
+  }
 
   return (
     <div>
       <StyleBox>
         <Typography variant="h6" mb={2}>
-          Add User
+          Edit User
         </Typography>
         <Box component="form" mt={3} onSubmit={handleSubmit}>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            sx={{ mb: 2 }}
-          >
-            Save
-          </Button>
+          <Box display="flex" gap={2} mb={2}>
+            <Button variant="contained" color="primary" type="submit">
+              Update
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={handleCancel}>
+              Cancel
+            </Button>
+          </Box>
           <Grid container spacing={2}>
             <Grid size={{ sm: 6, xs: 12, md: 6, lg: 6 }}>
               <TextField
@@ -97,6 +160,7 @@ function AddUser() {
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                required
               />
               <TextField
                 label="Email"
@@ -115,6 +179,7 @@ function AddUser() {
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                required
               />
               <TextField
                 label="Address"
@@ -124,6 +189,7 @@ function AddUser() {
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                required
               />
               <TextField
                 label="City"
@@ -133,8 +199,8 @@ function AddUser() {
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                required
               />
-
               <TextField
                 label="Postal Code"
                 name="postalCode"
@@ -143,8 +209,8 @@ function AddUser() {
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                required
               />
-              {/* Role select */}
             </Grid>
             <Grid size={{ sm: 6, xs: 12, md: 6, lg: 6 }}>
               <TextField
@@ -155,6 +221,7 @@ function AddUser() {
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                required
               />
               <TextField
                 label="Department"
@@ -164,6 +231,7 @@ function AddUser() {
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                required
               />
               <TextField
                 label="Position"
@@ -173,6 +241,7 @@ function AddUser() {
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                required
               />
               <TextField
                 label="Country"
@@ -182,22 +251,26 @@ function AddUser() {
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                required
               />
-              {/* Removed Manager, Manager Email, Manager Phone fields */}
               <FormControl fullWidth margin="normal">
                 <InputLabel id="role-label">Role</InputLabel>
                 <Select
                   labelId="role-label"
                   id="role"
                   multiple
-                  value={user.role}
+                  value={user.role || []}
                   onChange={handleRoleChange}
                   input={<OutlinedInput label="Role" />}
-                  renderValue={(selected) => (selected as string[]).join(', ')}
+                  renderValue={(selected) =>
+                    (selected as string[])?.join(', ') || ''
+                  }
                 >
                   {ROLE_OPTIONS.map((role) => (
                     <MenuItem key={role} value={role}>
-                      <Checkbox checked={user.role.indexOf(role) > -1} />
+                      <Checkbox
+                        checked={(user.role || []).indexOf(role) > -1}
+                      />
                       <ListItemText primary={role} />
                     </MenuItem>
                   ))}
@@ -213,6 +286,7 @@ function AddUser() {
                 fullWidth
                 margin="normal"
               />
+              {/* gender */}
             </Grid>
             <Grid size={12}>
               <FormControl component="fieldset" margin="normal">
@@ -237,4 +311,4 @@ function AddUser() {
   );
 }
 
-export default AddUser;
+export default EditUser;

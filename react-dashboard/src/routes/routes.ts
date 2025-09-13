@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import CategoryPage from '../app/category/Category';
 import AddUser from '../app/user/AddUser';
-import User from '../app/user/User';
+import UserPage from '../app/user/User';
 import Dashboard from '../app/dashboard/Dashboard';
 import Order from '../app/order/Order';
 import AddProduct from '../app/product/AddProduct';
@@ -10,6 +10,7 @@ import EditProduct from '../app/product/EditProduct';
 import { Layout } from '../common/layout';
 import UserProfile from '../app/user/UserProfile';
 import VariantPage from '../app/variant/variant';
+import EditUser from '../app/user/EditUser';
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +44,15 @@ export const router = createBrowserRouter([
 
       {
         path: '/user',
-        Component: User,
+        Component: UserPage,
+      },
+      {
+        path: '/user/add',
+        Component: AddUser,
+      },
+      {
+        path: '/user/edit/:id',
+        Component: EditUser,
       },
       {
         path: '/add-user',
