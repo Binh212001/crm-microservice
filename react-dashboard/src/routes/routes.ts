@@ -29,7 +29,7 @@ export const router = createBrowserRouter([
         Component: AddProduct,
       },
       {
-        path: '/product/:id',
+        path: '/edit-product/:id',
         Component: EditProduct,
       },
       {

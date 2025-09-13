@@ -22,6 +22,11 @@ export class Product extends AbstractEntity {
   name: string;
 
   @Column({ type: 'varchar' })
+  sku: string;
+  @Column({ type: 'varchar' })
+  barcode: string;
+
+  @Column({ type: 'varchar' })
   description: string;
 
   @Column({ type: 'boolean', default: false })
@@ -66,5 +71,5 @@ export class Product extends AbstractEntity {
   variants: Relation<ProductVariant>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  images: FileResDto;
+  image: FileResDto;
 }

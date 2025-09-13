@@ -38,7 +38,7 @@ export class ProductResDto {
   category: CategoryResDto;
   @Expose()
   @Type(() => FileResDto)
-  images: FileResDto;
+  image: FileResDto;
   @Expose()
   variants: VariantResDto[];
 }

@@ -41,6 +41,7 @@ const menuItems: MenuItem[] = [
         to: '/add-product',
       },
       { label: 'Category', to: '/category' },
+      { label: 'Variant', to: '/variant' },
     ],
   },
   {

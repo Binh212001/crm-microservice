@@ -75,7 +75,7 @@ function AddProduct() {
     salesPrice: 0,
     soldQuantity: 0,
     categoryId: 0,
-    images: {
+    image: {
       type: '',
       size: 0,
       name: '',
@@ -108,7 +108,7 @@ function AddProduct() {
 
       const productRes = await createProduct({
         ...productInfo,
-        ...(imageRes && { images: imageRes }),
+        ...(imageRes && { image: imageRes }),
         variants: addedVariants,
       }).unwrap();
 
