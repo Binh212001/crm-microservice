@@ -18,6 +18,15 @@ import { ClientsModule } from '@nestjs/microservices';
           queueOptions: { durable: false },
         },
       },
+      {
+        name: 'EMAIL_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://guest:guest@localhost:5672'],
+          queue: 'EMAIL_QUEUE',
+          queueOptions: { durable: false },
+        },
+      },
     ]),
   ],
   controllers: [OrderController],

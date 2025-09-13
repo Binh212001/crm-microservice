@@ -51,6 +51,16 @@ const menuItems: MenuItem[] = [
   },
 
   {
+    icon: <Person2Outlined />,
+    label: 'Lead',
+    to: '/lead',
+  },
+  {
+    icon: <Person2Outlined />,
+    label: 'Opportunity',
+    to: '/oportunity',
+  },
+  {
     icon: <MonetizationOnOutlined />,
     label: 'Order',
     to: '/order',

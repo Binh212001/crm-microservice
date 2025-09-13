@@ -13,6 +13,7 @@ import {
   Stack,
   TextField,
   InputAdornment,
+  useTheme,
 } from '@mui/material';
 import { useState } from 'react';
 import { useGetProductsQuery } from '../../service/productApi';
@@ -21,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 
 export default function Product() {
+  const theme = useTheme();
   const [filters, setFilters] = useState({
     name: '',
     sku: '',
@@ -136,7 +138,7 @@ export default function Product() {
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody sx={{ backgroundColor: theme.palette.background.paper }}>
               {(data?.data || []).map((p) => (
                 <TableRow key={p.id} hover>
                   <TableCell>{p.id}</TableCell>
