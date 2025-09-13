@@ -47,13 +47,7 @@ const menuItems: MenuItem[] = [
   {
     icon: <Person2Outlined />,
     label: 'User',
-    children: [
-      { label: 'List User', to: '/user' },
-      {
-        label: 'Add user',
-        to: '/add-user',
-      },
-    ],
+    to: '/user',
   },
 
   {

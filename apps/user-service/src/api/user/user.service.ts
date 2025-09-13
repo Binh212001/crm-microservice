@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { plainToInstance } from 'class-transformer';
 import { FindOptionsWhere, Like } from 'typeorm';
@@ -22,8 +26,10 @@ export class UserService {
     const user = await this.userRepository.findOne({
       where: { email: dto.email },
     });
-    if (!user) {
-      throw new NotFoundException(`User with email ${dto.email} not found`);
+    if (user) {
+      throw new BadRequestException(
+        `User with email ${dto.email} already exists`,
+      );
     }
     const newUser = this.userRepository.create({
       ...dto,

@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsBoolean,
+  IsEnum,
+} from 'class-validator';
 import { RoleEnum } from '../enums/role';
 
 export class CreateUserDto {
@@ -10,13 +16,9 @@ export class CreateUserDto {
   @IsOptional()
   email?: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsEnum(RoleEnum, { each: true })
   role: RoleEnum[];
-
-  @IsString()
-  @IsNotEmpty()
-  status: string;
 
   @IsString()
   @IsNotEmpty()
@@ -25,10 +27,6 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   address: string;
-
-  @IsString()
-  @IsNotEmpty()
-  avatar: string;
 
   @IsBoolean()
   @IsNotEmpty()

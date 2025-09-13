@@ -14,7 +14,7 @@ export class User extends AbstractEntity {
   @Column({ type: 'varchar' })
   email: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   password: string;
 
   @Column({ type: 'varchar', default: UserStatus.ACTIVE })

@@ -1,28 +1,25 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   ParseIntPipe,
-  ValidationPipe,
+  Patch,
+  Post,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, UserReqDto, UserResDto } from './dto';
-import { User } from './entities/user.entity';
 import { PaginationResponse } from '../../comom/pagination/pagination';
 import { UpdateDeleteResDto } from '../../comom/response/update-delete-res.dto';
-import { RoleEnum } from './enums/role';
-import { Role } from 'apps/libs/decorators/role.decorator';
+import { CreateUserDto, UpdateUserDto, UserReqDto, UserResDto } from './dto';
+import { User } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Role(RoleEnum.ADMIN)
   @Post()
   async create(
     @Body(ValidationPipe) createCategoryDto: CreateUserDto,
@@ -30,7 +27,6 @@ export class UserController {
     return await this.userService.create(createCategoryDto);
   }
 
-  @Role(RoleEnum.ADMIN)
   @Get()
   async findAll(
     @Query() userReqDto: UserReqDto,
@@ -42,7 +38,6 @@ export class UserController {
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<UserResDto> {
     return await this.userService.findOne(id);
   }
-  @Role(RoleEnum.ADMIN)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -51,7 +46,6 @@ export class UserController {
     return await this.userService.update(id, updateCategoryDto);
   }
 
-  @Role(RoleEnum.ADMIN)
   @Delete(':id')
   async remove(
     @Param('id', ParseIntPipe) id: number,
