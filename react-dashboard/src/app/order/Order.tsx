@@ -18,6 +18,7 @@ import {
   Alert,
   Menu,
   MenuItem,
+  useTheme,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -30,6 +31,7 @@ import { useNavigate } from 'react-router-dom';
 import { OrderStatus } from '../../service/orderApi';
 
 function Order() {
+  const theme = useTheme();
   const [filters, setFilters] = useState({
     orderNumber: '',
     customerName: '',
@@ -250,7 +252,9 @@ function Order() {
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody
+                sx={{ backgroundColor: theme.palette.background.paper }}
+              >
                 {(data?.data || []).map((order) => (
                   <TableRow key={order.id} hover>
                     <TableCell

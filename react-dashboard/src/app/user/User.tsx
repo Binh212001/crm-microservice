@@ -16,6 +16,7 @@ import {
   TableRow,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +24,7 @@ import { StyleBox } from '../../common/styleBox';
 import { useGetUsersQuery } from '../../service/userApi';
 
 function UserPage() {
+  const theme = useTheme();
   const [filters, setFilters] = useState({
     fullName: '',
     email: '',
@@ -144,7 +146,9 @@ function UserPage() {
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody
+                sx={{ backgroundColor: theme.palette.background.paper }}
+              >
                 {(data?.data || []).map((u) => (
                   <TableRow key={u.id} hover>
                     <TableCell>{u.id}</TableCell>

@@ -16,6 +16,7 @@ import {
   Chip,
   CircularProgress,
   Alert,
+  useTheme,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useGetLeadsQuery } from '../../service/leadApi';
@@ -23,6 +24,7 @@ import { StyleBox } from '../../common/styleBox';
 import { useNavigate } from 'react-router-dom';
 
 function LeadPage() {
+  const theme = useTheme();
   const [filters, setFilters] = useState({
     name: '',
     email: '',
@@ -35,7 +37,10 @@ function LeadPage() {
   const navigate = useNavigate();
   const { data, isLoading, isFetching, error } = useGetLeadsQuery(filters);
 
-  const handlePageChange = (_event, value) => {
+  const handlePageChange = (
+    _event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
     setFilters((prev) => ({
       ...prev,
       page: value,
@@ -43,7 +48,7 @@ function LeadPage() {
   };
 
   // Filter handlers
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
       ...prev,
@@ -52,11 +57,11 @@ function LeadPage() {
     }));
   };
 
-  const handleEditLead = (id) => {
+  const handleEditLead = (id: number) => {
     navigate(`/lead/edit/${id}`);
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'NEW':
         return 'default';
@@ -172,7 +177,9 @@ function LeadPage() {
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody
+                sx={{ backgroundColor: theme.palette.background.paper }}
+              >
                 {(data?.data || []).map((lead) => (
                   <TableRow key={lead.id} hover>
                     <TableCell>{lead.id}</TableCell>

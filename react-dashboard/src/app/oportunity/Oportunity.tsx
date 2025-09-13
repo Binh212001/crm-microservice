@@ -16,6 +16,7 @@ import {
   Chip,
   CircularProgress,
   Alert,
+  useTheme,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useGetOpportunitiesQuery } from '../../service/leadApi';
@@ -23,6 +24,8 @@ import { StyleBox } from '../../common/styleBox';
 import { useNavigate } from 'react-router-dom';
 
 function OportunityPage() {
+  const theme = useTheme();
+
   const [filters, setFilters] = useState({
     name: '',
     email: '',
@@ -37,7 +40,10 @@ function OportunityPage() {
   const { data, isLoading, isFetching, error } =
     useGetOpportunitiesQuery(filters);
 
-  const handlePageChange = (_event, value) => {
+  const handlePageChange = (
+    _event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
     setFilters((prev) => ({
       ...prev,
       page: value,
@@ -45,7 +51,7 @@ function OportunityPage() {
   };
 
   // Filter handlers
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
       ...prev,
@@ -54,11 +60,11 @@ function OportunityPage() {
     }));
   };
 
-  const handleEditOpportunity = (id) => {
+  const handleEditOpportunity = (id: number) => {
     navigate(`/opportunity/edit/${id}`);
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'QUALIFIED':
         return 'default';
@@ -181,7 +187,9 @@ function OportunityPage() {
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody
+                sx={{ backgroundColor: theme.palette.background.paper }}
+              >
                 {(data?.data || []).map((opportunity) => (
                   <TableRow key={opportunity.id} hover>
                     <TableCell>{opportunity.id}</TableCell>

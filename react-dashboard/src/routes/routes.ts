@@ -13,6 +13,7 @@ import VariantPage from '../app/variant/variant';
 import EditUser from '../app/user/EditUser';
 import LeadPage from '../app/lead/Lead';
 import OportunityPage from '../app/oportunity/Oportunity';
+import Setting from '../app/setting/Setting';
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: '/oportunity',
         Component: OportunityPage,
+      },
+      {
+        path: '/setting',
+        Component: Setting,
       },
       {
         path: '/add-user',

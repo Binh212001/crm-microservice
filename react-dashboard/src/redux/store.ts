@@ -6,6 +6,7 @@ import { uploadApi } from '../service/uploadApi';
 import { userApi } from '../service/userApi';
 import { leadApi } from '../service/leadApi';
 import { orderApi } from '../service/orderApi';
+import { settingApi } from '../service/settingApi';
 export const store = configureStore({
   reducer: {
     [categoryApi.reducerPath]: categoryApi.reducer,
@@ -15,6 +16,7 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [leadApi.reducerPath]: leadApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
+    [settingApi.reducerPath]: settingApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -25,5 +27,6 @@ export const store = configureStore({
       userApi.middleware,
       leadApi.middleware,
       orderApi.middleware,
+      settingApi.middleware,
     ),
 });
