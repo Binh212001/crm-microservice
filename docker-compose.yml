@@ -61,10 +61,21 @@ services:
     networks:
       - sass-backend-network
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - sass-backend-network
+
 volumes:
   postgres_data:
   pgadmin_data:
   rabbitmq_data:
+  redis_data:
 
 networks:
   sass-backend-network:

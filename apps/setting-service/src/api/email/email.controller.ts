@@ -17,4 +17,11 @@ export class EmailController {
   async sendOrder(@Payload() order: Order): Promise<void> {
     this.emailService.sendOrderEmail(order);
   }
+  @EventPattern('send_forgot_password')
+  async sendForgotPassword(
+    @Payload() email: string,
+    @Payload() password: string,
+  ): Promise<void> {
+    this.emailService.sendForgotPasswordEmail(email, password);
+  }
 }

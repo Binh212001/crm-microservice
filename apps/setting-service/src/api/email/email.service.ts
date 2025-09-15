@@ -25,4 +25,46 @@ export class EmailService {
       context: { order },
     });
   }
+  async sendForgotPasswordEmail(
+    email: string,
+    password: string,
+  ): Promise<void> {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Forgot Password',
+      template: 'forgot-password.template.hbs',
+      context: {
+        email,
+        password,
+        generatedAt: new Date().toISOString(),
+      },
+    });
+  }
+  async sendResetPasswordEmail(email: string, password: string): Promise<void> {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Reset Password',
+      template: 'reset-password.template.hbs',
+      context: { email, password },
+    });
+  }
+  async sendVerifyEmailEmail(email: string): Promise<void> {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Verify Email',
+      template: 'verify-email.template.hbs',
+      context: { email },
+    });
+  }
+  async sendChangePasswordEmail(
+    email: string,
+    password: string,
+  ): Promise<void> {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Change Password',
+      template: 'change-password.template.hbs',
+      context: { email, password },
+    });
+  }
 }

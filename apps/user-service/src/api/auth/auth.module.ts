@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -11,6 +12,17 @@ import { UserModule } from '../user/user.module';
       signOptions: { expiresIn: '1h' },
     }),
     UserModule,
+    ClientsModule.register([
+      {
+        name: 'EMAIL_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://guest:guest@localhost:5672'],
+          queue: 'EMAIL_QUEUE',
+          queueOptions: { durable: false },
+        },
+      },
+    ]),
   ],
   controllers: [AuthController],
   providers: [AuthService],
