@@ -38,13 +38,8 @@ export class LeadService {
       where: { email: dto.email },
     });
 
-    if (existingLead) {
-      throw new ConflictException(
-        `Lead with email ${dto.email} already exists`,
-      );
-    }
     if (dto.leadLines && dto.leadLines.length > 0) {
-      const productIds = dto.leadLines.map((item) => item.productId);
+      const productIds = dto.leadLines.map((item) => item.id);
       const product = await firstValueFrom(
         this.clientProxy.send(
           { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
@@ -67,7 +62,7 @@ export class LeadService {
       await this.leadLineRepository.save(
         dto.leadLines.map((item) =>
           this.leadLineRepository.create({
-            productId: item.productId,
+            productId: item.id,
             lead: leadSaved,
           }),
         ),
@@ -151,7 +146,7 @@ export class LeadService {
     const products = await firstValueFrom(
       this.clientProxy.send(
         { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
-        lead.leadLines.map((item) => item.productId),
+        lead.leadLines.map((item) => item.id),
       ),
     );
 
@@ -171,7 +166,7 @@ export class LeadService {
     }
 
     if (updateLeadDto.leadLines && updateLeadDto.leadLines.length > 0) {
-      const productIds = updateLeadDto.leadLines.map((item) => item.productId);
+      const productIds = updateLeadDto.leadLines.map((item) => item.id);
       const product = await firstValueFrom(
         this.clientProxy.send(
           { cmd: 'get_product_by_ids', queue: 'PRODUCT_QUEUE' },
@@ -180,12 +175,14 @@ export class LeadService {
       );
 
       await this.leadLineRepository.save(
-        updateLeadDto.leadLines.map((item) =>
-          this.leadLineRepository.create({
-            productId: item.productId,
+        updateLeadDto.leadLines.map((item) => {
+          console.log('🚀 ~ LeadService ~ update ~ item:', item);
+          return this.leadLineRepository.create({
+            productId: item.id,
+            quantity: item.quantity ?? 1,
             lead: lead,
-          }),
-        ),
+          });
+        }),
       );
     }
 

@@ -23,23 +23,23 @@ export class CreateLeadDto {
   phone: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   address: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   city: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   country: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   postalCode: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   company: string;
 
   @IsString()
@@ -49,18 +49,6 @@ export class CreateLeadDto {
   @IsString()
   @IsOptional()
   position?: string;
-
-  @IsString()
-  @IsOptional()
-  manager?: string;
-
-  @IsEmail()
-  @IsOptional()
-  managerEmail?: string;
-
-  @IsString()
-  @IsOptional()
-  managerPhone?: string;
 
   @IsEnum(LeadStatus)
   @IsOptional()
@@ -74,5 +62,9 @@ export class CreateLeadDto {
 export class LeadLineResDto {
   @IsNumber()
   @IsNotEmpty()
-  productId: number;
+  id: number;
+
+  @IsNumber()
+  @IsOptional()
+  quantity: number;
 }

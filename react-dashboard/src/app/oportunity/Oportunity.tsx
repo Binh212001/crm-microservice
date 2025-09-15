@@ -179,7 +179,6 @@ function OportunityPage() {
                   <TableCell>Phone</TableCell>
                   <TableCell>Company</TableCell>
                   <TableCell>Position</TableCell>
-                  <TableCell>Manager</TableCell>
                   <TableCell>City</TableCell>
                   <TableCell>Country</TableCell>
                   <TableCell>Status</TableCell>
@@ -225,16 +224,6 @@ function OportunityPage() {
                       {opportunity.company}
                     </TableCell>
                     <TableCell>{opportunity.position || '-'}</TableCell>
-                    <TableCell
-                      sx={{
-                        maxWidth: 120,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      {opportunity.manager || '-'}
-                    </TableCell>
                     <TableCell>{opportunity.city}</TableCell>
                     <TableCell>{opportunity.country}</TableCell>
                     <TableCell>

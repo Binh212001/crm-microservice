@@ -24,19 +24,19 @@ export class Lead extends AbstractEntity {
   @Column({ type: 'varchar', length: 20 })
   phone: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   address: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   city: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   country: string;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 20, nullable: true })
   postalCode: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   company: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
@@ -44,15 +44,6 @@ export class Lead extends AbstractEntity {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   position?: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  manager?: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  managerEmail?: string;
-
-  @Column({ type: 'varchar', length: 20, nullable: true })
-  managerPhone?: string;
 
   @Column({
     type: 'enum',

@@ -14,6 +14,8 @@ export class LeadLine extends AbstractEntity {
   id: number;
   @Column({ type: 'int' })
   productId: number;
+  @Column({ type: 'int', default: 1 })
+  quantity: number;
   @ManyToOne(() => Lead, (lead) => lead.leadLines)
   lead: Relation<Lead>;
 }

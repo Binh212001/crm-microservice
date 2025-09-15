@@ -36,9 +36,6 @@ export interface LeadRes {
   company: string;
   department?: string;
   position?: string;
-  manager?: string;
-  managerEmail?: string;
-  managerPhone?: string;
   status: LeadStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -66,11 +63,8 @@ export interface CreateLeadReq {
   company: string;
   department?: string;
   position?: string;
-  manager?: string;
-  managerEmail?: string;
-  managerPhone?: string;
   status?: LeadStatus;
-  leadLines: LeadLineReq[];
+  leadLines?: LeadLineReq[];
 }
 
 export interface UpdateLeadReq {
@@ -84,15 +78,13 @@ export interface UpdateLeadReq {
   company?: string;
   department?: string;
   position?: string;
-  manager?: string;
-  managerEmail?: string;
-  managerPhone?: string;
   status?: LeadStatus;
   leadLines?: LeadLineReq[];
 }
 
 export interface LeadLineReq {
-  productId: number;
+  id: number;
+  quantity?: number;
 }
 
 // Opportunity Interfaces
@@ -115,9 +107,7 @@ export interface OpportunityRes {
   company: string;
   department: string;
   position: string;
-  manager: string;
-  managerEmail: string;
-  managerPhone: string;
+
   status: OpportunityStatus;
   leadId: number;
   createdAt: Date;
@@ -147,9 +137,6 @@ export interface CreateOpportunityReq {
   company: string;
   department?: string;
   position?: string;
-  manager?: string;
-  managerEmail?: string;
-  managerPhone?: string;
   status?: OpportunityStatus;
   leadId?: number;
   opportunityLines: CreateOpportunityLineReq[];
@@ -166,9 +153,6 @@ export interface UpdateOpportunityReq {
   company?: string;
   department?: string;
   position?: string;
-  manager?: string;
-  managerEmail?: string;
-  managerPhone?: string;
   status?: OpportunityStatus;
   leadId?: number;
   opportunityLines?: CreateOpportunityLineReq[];
